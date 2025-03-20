@@ -1,0 +1,19 @@
+@import '../../../app/colors.scss';
+.button {
+    width: 155px;
+    height: 35px;
+    display: flex;
+    border-radius: 20px;
+    align-items: center;
+    background-color: $primaryColor;
+    justify-content: center;
+    color: $white;
+    font-family: FiraGO;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+  }
+  .button:hover {
+    background-color: $secondaryColor;
+  }

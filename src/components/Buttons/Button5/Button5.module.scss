@@ -1,0 +1,43 @@
+@import '../../../app/colors.scss';
+// წრეში არაა გასასწორებელიაა
+.button {
+    width: 550px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    border-radius: 5px;
+    font-family: FiraGO;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: $primaryColor;
+    top: 88px;
+    left: 20px;
+    padding: 12px 15px;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.round {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $primaryColor;
+    width: 18;
+    height: 18;
+    border-radius: 30px;
+    gap: 10px;
+    border-width: 1.5px;
+    padding: 10px;
+
+}
+
+.button:hover {
+    color: $secondaryColor;
+
+    .round {
+        color: $secondaryColor;
+    }
+}
