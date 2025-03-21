@@ -1,0 +1,38 @@
+@import "../../app/colors.scss";
+
+.userCard {
+  width: 550;
+  height: 46;
+  top: 20px;
+  left: 20px;
+  padding-top: 12px;
+  padding-right: 14px;
+  padding-bottom: 12px;
+  padding-left: 14px;
+  gap: 6px;
+  display: flex;
+  align-items: center;
+  background: $white;
+
+  .userImage {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .userName {
+    font-family: FiraGO;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: $userNameColor;
+  }
+}
+.userCard:hover {
+  background: $userBackgroundColor;
+}
