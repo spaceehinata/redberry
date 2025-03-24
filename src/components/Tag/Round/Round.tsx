@@ -1,14 +1,13 @@
 import clsx from "clsx";
 import React from "react";
+import { TagColor } from "@/types";
 import styles from "./Round.module.scss";
 
-type Color = "pink" | "orange" | "blue" | "yellow";
-
 type Props = {
-  color: Color;
+  color: TagColor;
 };
 
-const getColor = (color: Color) => {
+const getColor = (color: TagColor) => {
   switch (color) {
     case "pink":
       return { text: "დიზაინი" };
