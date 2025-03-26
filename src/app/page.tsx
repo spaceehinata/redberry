@@ -9,27 +9,32 @@ import Button5 from "@/components/Buttons/Button5/Button5";
 import Round from "@/components/Tag/Round/Round";
 import User from "@/components/User/User";
 import Square from "@/components/Tag/Square/Square";
+import Dropdown from "@/components/Dropdown/Dropdown";
 
 export default function Home() {
   return (
     <div className={styles.page}>
-      <Header />
+      {/* <Header />
       <Button1 />
       <Button2 />
       <Button3 />
       <Button4 />
       <Button5 />
-      <User />
-      {/* Render the Round components here */}
-      <Round color="pink" />
-      <Round color="orange" />
-      <Round color="blue" />
-      <Round color="yellow" />
-      {/* Render Square components with different priorities and sizes */}
-      <Square priority="high" size="big" />
-      <Square priority="medium" size="small" />
-      <Square priority="low" size="big" />
-      <Square priority="high" size="small" />
+      <User /> */}
+
+      {/* Dropdown კომპონენტები */}
+      <Dropdown
+        title="დეპარტამენტი"
+        apiEndpoint="https://momentum.redberryinternship.ge/api/departments"
+      />
+      <Dropdown
+        title="პრიორიტეტი"
+        apiEndpoint="https://momentum.redberryinternship.ge/api/priorities"
+      />
+      <Dropdown
+        title="თანამშრომელი"
+        apiEndpoint="https://momentum.redberryinternship.ge/api/employees"
+      />
     </div>
   );
 }

@@ -1,10 +1,12 @@
 import React from "react";
 import styles from "./Button1.module.scss";
 
-type Props = {};
+type Props = {
+  text: string;
+};
 
-const Button1 = (props: Props) => {
-  return <div className={styles.button}>button</div>;
+const Button1 = ({ text }: Props) => {
+  return <div className={styles.button}>{text}</div>;
 };
 
 export default Button1;
