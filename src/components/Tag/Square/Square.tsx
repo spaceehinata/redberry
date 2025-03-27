@@ -8,8 +8,8 @@ type Size = "big" | "small";
 type Props = {
   priority: Priority;
   size: Size;
-  icon?: string; // Optional icon prop
-  label?: string; // Optional label prop
+  icon?: string; 
+  label?: string; 
 };
 
 const getPriorityIcon = (priority: Priority) => {

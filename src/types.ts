@@ -1,5 +1,7 @@
 export type Priority = "low" | "medium" | "high";
 export type TagColor = "pink" | "blue" | "orange" | "yellow" | "purple";
+export type TaskColor = "pink" | "red" | "blue" | "yellow";
+
 export type DepartmentType = { id: number; name: string };
 export type PriorityType = {
   id: number;

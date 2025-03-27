@@ -1,0 +1,72 @@
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+    padding: 20px;
+    background: #f0f0f0;
+    border-radius: 8px;
+  }
+  
+  .inputContainer {
+    display: flex;
+    flex-direction: column;
+  
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+  }
+  
+  .inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    input {
+      width: 384px;
+      height: 42px; 
+      border-radius: 6px; 
+      border: 1px solid #ccc; 
+      outline: none;
+      transition: 0.3s;
+    }
+  
+    .valid {
+      border-color: green;
+    }
+  
+    .invalid {
+      border-color: red;
+    }
+  
+    .infoIcon {
+      position: absolute;
+      right: 10px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+  
+  .validation {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  .validationItem {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  
+    img {
+      width: 16px;
+      height: 16px;
+    }
+  }
+  
+
+  
