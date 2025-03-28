@@ -1,26 +1,17 @@
 "use client";
+import React from "react";
+import Task from "@/app/components/Task/Task";
+import styles from "./page.module.css";
+import DatePicker from "./components/GiolaCal/DatePicker";
 
-import React, { useState } from "react";
-import Calendar from "../components/Calendar/Calendar";
-
-const App: React.FC = () => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-
-  const handleSelectDate = (date: Date) => {
-    setSelectedDate(date);
-    console.log("Selected date:", date);
-  };
-
-  const handleCancel = () => {
-    console.log("Cancelled");
-  };
-
+export default function Page({ params }: { params: { id: string } }) {
   return (
-    <div>
-      <h1>Selected Date: {selectedDate?.toLocaleDateString() || "None"}</h1>
-      <Calendar onSelectDate={handleSelectDate} onCancel={handleCancel} />
+    <div className={styles.pageContainer}>
+      <h1>Task Details</h1>
+      <div className={styles.taskWrapper}>
+        <Task taskId={params?.id} />
+      </div>
+      <DatePicker />
     </div>
   );
-};
-
-export default App;
+}
