@@ -108,7 +108,6 @@ const Dropdown: React.FC = () => {
             </label>
           ))}
 
-          {/* Button1 component with the text "არჩევა" inside the dropdown */}
           <div className={styles.selectButton}>
             <Button1 text="არჩევა" />
           </div>

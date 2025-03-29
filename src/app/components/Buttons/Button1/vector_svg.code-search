@@ -1,0 +1,9 @@
+# Query: vector.svg
+# ContextLines: 1
+
+1 result - 1 file
+
+src/app/components/Dropdown/Dropdown.module.scss:
+  90    bottom: 0;
+  91:   background-image: url("/asserts/Vector.svg");
+  92    background-size: 11px 8px;

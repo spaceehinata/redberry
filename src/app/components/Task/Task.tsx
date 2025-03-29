@@ -5,175 +5,105 @@ import Square from "../Tag/Square/Square";
 import Round from "../Tag/Round/Round";
 import { clsx } from "clsx";
 
-type Priority = {
-  id: number;
-  name: "High" | "Medium" | "Low";
-  icon: string;
-};
-
-type Department = {
-  id: number;
-  name: string;
-};
-
-type Employee = {
-  id: number;
-  name: string;
-  surname: string;
-  avatar: string;
-  department_id: number;
-};
-
-type TaskType = {
-  id: number;
-  name: string;
-  description: string;
-  due_date: string;
-  status: { id: number; name: string };
-  priority: Priority;
-  department: Department;
-  employee: Employee;
-};
-
-type Border = "pink" | "red" | "blue" | "yellow";
-type Color = "pink" | "orange" | "blue" | "yellow";
-
-type TaskProps = {
-  taskId?: string;
-  showAll?: boolean;
-};
-
 const API_URL = "https://momentum.redberryinternship.ge/api";
 const TOKEN = "9e85a2d7-4757-4769-9e4e-f7d01e4f8d08";
 
-const Task = ({ taskId, showAll = false }: TaskProps) => {
-  const [tasks, setTasks] = useState<TaskType[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+const Task = ({ taskId, showAll = false }) => {
+  const [tasks, setTasks] = useState([]);
+  const [priorities, setPriorities] = useState([]);
+  const [statuses, setStatuses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchTasks = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`${API_URL}/tasks`, {
-          headers: {
-            Authorization: `Bearer ${TOKEN}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const [tasksRes, prioritiesRes, statusesRes] = await Promise.all([
+          fetch(`${API_URL}/tasks`, { headers: { Authorization: `Bearer ${TOKEN}` } }),
+          fetch(`${API_URL}/priorities`, { headers: { Authorization: `Bearer ${TOKEN}` } }),
+          fetch(`${API_URL}/statuses`, { headers: { Authorization: `Bearer ${TOKEN}` } }),
+        ]);
 
-        console.log("Response Status:", response.status);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch tasks. Status: ${response.status}`);
+        if (!tasksRes.ok || !prioritiesRes.ok || !statusesRes.ok) {
+          throw new Error("Failed to fetch data");
         }
 
-        const data: TaskType[] = await response.json();
-        console.log("Fetched Data:", data);
-        setTasks(data);
+        const [tasksData, prioritiesData, statusesData] = await Promise.all([
+          tasksRes.json(),
+          prioritiesRes.json(),
+          statusesRes.json(),
+        ]);
+
+        // Update tasks with correct priority details
+        const updatedTasks = tasksData.map(task => {
+          const priority = prioritiesData.find(p => p.id === task.priority.id) || task.priority;
+          return { ...task, priority };
+        });
+
+        setTasks(updatedTasks);
+        setPriorities(prioritiesData);
+        setStatuses(statusesData);
       } catch (err) {
-        console.error("Fetch Error:", err);
-        setError((err as Error).message);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTasks();
+    fetchData();
   }, []);
 
-  const getBorderColor = (priorityName: string): Border => {
+  const getBorderColor = (priorityName) => {
     switch (priorityName.toLowerCase()) {
-      case "high":
-        return "pink";
-      case "medium":
-        return "yellow";
-      case "low":
-        return "blue";
-      default:
-        return "red";
+      case "high": case "მაღალი": return "pink";
+      case "medium": case "საშუალო": return "yellow";
+      case "low": case "დაბალი": return "blue";
+      default: return "red";
     }
   };
 
-  const getRoundColor = (priorityName: string): Color => {
-    switch (priorityName.toLowerCase()) {
-      case "high":
-        return "pink";
-      case "medium":
-        return "orange";
-      case "low":
-        return "blue";
-      default:
-        return "yellow";
-    }
-  };
-
-  const formatDate = (dateString: string): string => {
+  const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const day = date.getDate();
-    const year = date.getFullYear();
-    const monthNames = [
-      "იანვ",
-      "თებ",
-      "მარ",
-      "აპრ",
-      "მაი",
-      "ივნ",
-      "ივლ",
-      "აგვ",
-      "სექ",
-      "ოქტ",
-      "ნოე",
-      "დეკ",
-    ];
-    return `${day} ${monthNames[date.getMonth()]}, ${year}`;
+    const monthNames = ["იანვ", "თებ", "მარ", "აპრ", "მაი", "ივნ", "ივლ", "აგვ", "სექ", "ოქტ", "ნოე", "დეკ"];
+    return `${date.getDate()} ${monthNames[date.getMonth()]}, ${date.getFullYear()}`;
   };
 
-  const renderTask = (task: TaskType) => {
-    const border = getBorderColor(task.priority.name);
-    const color = getRoundColor(task.priority.name);
+  const getPriorityKey = (priorityName) => {
+    switch (priorityName.toLowerCase()) {
+      case "high": case "მაღალი": return "high";
+      case "medium": case "საშუალო": return "medium";
+      case "low": case "დაბალი": return "low";
+      default: return "low";
+    }
+  };
 
-    return (
-      <div key={task.id} className={clsx(Styles.task, Styles[border])}>
-        <div className={Styles.head}>
-          <div className={Styles.buttons}>
-            <Square
-              priority={
-                task.priority.name.toLowerCase() as "high" | "medium" | "low"
-              }
-              size="small"
-            />
-            <Round color={color} />
-          </div>
-          <div className={Styles.date}>{formatDate(task.due_date)}</div>
+  const renderTask = (task) => (
+    <div key={task.id} className={clsx(Styles.task, Styles[getBorderColor(task.priority.name)])}>
+      <div className={Styles.head}>
+        <div className={Styles.buttons}>
+          <Square priority={getPriorityKey(task.priority.name)} size="small" />
+          <Round color={getBorderColor(task.priority.name)} />
         </div>
-        <div className={Styles.middle}>
-          <h2>{task.name}</h2>
-          <p>{task.description}</p>
-        </div>
-        <div className={Styles.bottom}>
-          <img
-            src={task.employee.avatar}
-            alt={`${task.employee.name} ${task.employee.surname}`}
-          />
-          <div className={Styles.comments}>
-            <img src="/asserts/Comments.svg" alt="comment" />
-            <p>8</p>
-          </div>
+        <div className={Styles.date}>{formatDate(task.due_date)}</div>
+      </div>
+      <div className={Styles.middle}>
+        <h2>{task.name}</h2>
+        <p>{task.description}</p>
+      </div>
+      <div className={Styles.bottom}>
+        <img src={task.employee.avatar} alt={`${task.employee.name} ${task.employee.surname}`} />
+        <div className={Styles.comments}>
+          <img src="/asserts/Comments.svg" alt="comment" />
+          <p>8</p>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  if (showAll) return <>{tasks.map(renderTask)}</>;
-
-  const taskToShow = taskId
-    ? tasks.find((task) => task.id === parseInt(taskId))
-    : tasks[0];
-  if (!taskToShow) return <div>No task found</div>;
-
-  return renderTask(taskToShow);
+  return showAll ? <>{tasks.map(renderTask)}</> : renderTask(tasks.find((t) => t.id === parseInt(taskId)) || tasks[0]);
 };
 
 export default Task;
