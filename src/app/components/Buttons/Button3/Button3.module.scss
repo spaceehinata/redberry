@@ -1,7 +1,7 @@
-@import "../../../app/colors.scss";
+@import "../../../colors.scss";
 .button {
-  width: 268px;
-  height: 40px;
+  width: 228px;
+  height: 20px;
   display: flex;
   justify-content: center;
   border-radius: 5px;
@@ -24,4 +24,10 @@
   background-color: $secondaryColor;
   animation-timing-function: ease-out;
   animation-duration: 300ms;
+}
+
+.button p{
+  text-align: center;
+  align-items: center;
+  margin: 0;
 }

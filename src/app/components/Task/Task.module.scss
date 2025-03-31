@@ -1,9 +1,31 @@
 @import "../../colors.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  justify-content: center;
+  align-items: center; 
+  margin-left: 120px;
+  margin-right: 120px;
+}
+
+.taskGrid {
+  display: flex;
+  justify-content: center;
+  gap: 55px;
+}
+
+.taskColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
 .task {
-  width: 341px;
+  width: 340PX;
   height: 177px;
   border-radius: 15px;
-  // gap: 28px;
   padding: 20px;
   background-color: $white;
   border: 1px solid rgba(206, 212, 218, 1);
@@ -11,44 +33,46 @@
   flex-direction: column;
   justify-content: space-between;
 }
+
 .head,
 .bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .buttons {
   display: flex;
   gap: 10px;
 }
+
 .date {
   font-family: FiraGO;
   font-weight: 400;
   font-size: 12px;
   line-height: 100%;
-  letter-spacing: 0%;
   color: black;
 }
+
 .middle {
   display: flex;
   flex-direction: column;
-  // gap: 12px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
+
 .middle h2 {
   font-family: FiraGO;
   font-weight: 500;
   font-size: 15px;
-  line-height: 100%;
-  letter-spacing: 0%;
   color: $textColor;
 }
+
 .middle p {
-  color: $textColor;
   font-family: FiraGO;
   font-weight: 400;
   font-size: 14px;
-  line-height: 100%;
-  letter-spacing: 0%;
+  color: $textColor;
 }
 
 .comments {
@@ -58,19 +82,21 @@
   font-family: FiraGO;
   font-weight: 400;
   font-size: 14px;
-  line-height: 100%;
-  letter-spacing: 0%;
   color: $textColor;
 }
+
 .yellow {
   border-color: $yellow;
 }
+
 .red {
   border-color: $red;
 }
+
 .pink {
   border-color: $pink;
 }
+
 .blue {
   border-color: $blue;
 }

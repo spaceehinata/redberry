@@ -8,6 +8,8 @@ import Button1 from "../Buttons/Button1/Button1";
 interface OptionData {
   id: number;
   name: string;
+  surname?: string; 
+  avatar?: string;
 }
 
 const API_URL = "https://momentum.redberryinternship.ge/api";
@@ -104,7 +106,14 @@ const Dropdown: React.FC = () => {
                 checked={checkedItems[visibleIndex][idx]}
                 onChange={() => toggleCheckbox(visibleIndex, idx)}
               />
-              {item.name}
+              {visibleIndex === 2 ? ( // For employees
+                <div className={styles.employeeItem}>
+                  <img src={item.avatar} alt={item.name} className={styles.avatar} />
+                  <span>{item.name} {item.surname}</span>
+                </div>
+              ) : (
+                item.name
+              )}
             </label>
           ))}
 

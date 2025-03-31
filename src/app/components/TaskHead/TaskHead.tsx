@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React from "react";
 import { TaskColor } from "@/types";
-import styles from "../TaskHead/TaskHead.module.scss";
+import styles from "./TaskHead.module.scss";
 
 type Props = {
   color: TaskColor;
