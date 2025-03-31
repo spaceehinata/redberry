@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Filter from "./components/Filter/Filter"; // Adjust path as needed
-import Dropdown from "./components/Dropdown/Dropdown"; // Adjust path as needed
-import Header from "./components/Header/Header"; // Adjust path as needed
-import Task from "./components/Task/Task"; // Adjust path as needed
-import styles from "./page.module.css"; // Adjust path as needed
+import Filter from "./components/Filter/Filter";
+import Dropdown from "./components/Dropdown/Dropdown";
+import Header from "./components/Header/Header";
+import Task from "./components/Task/Task";
+import styles from "./page.module.css";
 
 export default function Page() {
   const [filters, setFilters] = useState({
@@ -37,12 +37,9 @@ export default function Page() {
       <Dropdown onFilterChange={handleFilterChange} />
       <Filter filters={filters} onRemoveFilter={handleRemoveFilter} />
       <div className={styles.taskWrapper}>
-        <Task showAll={true} />
+        <Task showAll={true} filters={filters} />
       </div>
       <div>
-        {filters.departments.length > 0 && (
-          <div>Departments: {filters.departments.join(", ")}</div>
-        )}
         {filters.priorities.length > 0 && (
           <div>Priorities: {filters.priorities.join(", ")}</div>
         )}
@@ -53,7 +50,6 @@ export default function Page() {
           filters.priorities.length === 0 &&
           filters.employees.length === 0 && <div>No filters applied</div>}
       </div>
-      {/* <DatePicker /> */}
     </div>
   );
 }

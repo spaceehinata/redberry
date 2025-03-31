@@ -4,45 +4,94 @@ import Square from "../Tag/Square/Square";
 import Round from "../Tag/Round/Round";
 import TaskHeadWrapper from "../TaskHead/TaskHead";
 import { clsx } from "clsx";
+import { TaskColor } from "@/types";
 
 const API_URL = "https://momentum.redberryinternship.ge/api";
 const TOKEN = "9e85a2d7-4757-4769-9e4e-f7d01e4f8d08";
 
-const Task = () => {
-  const [tasks, setTasks] = useState([]);
+interface TaskData {
+  id: number;
+  name: string;
+  description: string;
+  due_date: string;
+  priority: { name: string };
+  employee: { name: string; surname: string };
+  department: { name: string };
+  status: { id: number; name: string };
+}
+
+interface DepartmentData {
+  id: number;
+  name: string;
+}
+
+interface StatusData {
+  id: number;
+  name: string;
+}
+
+interface TaskProps {
+  showAll: boolean;
+  filters?: {
+    departments: string[];
+    priorities: string[];
+    employees: string[];
+  };
+}
+
+const Task: React.FC<TaskProps> = ({
+  showAll,
+  filters = { departments: [], priorities: [], employees: [] },
+}) => {
+  const [tasks, setTasks] = useState<TaskData[]>([]);
   const [priorities, setPriorities] = useState([]);
-  const [statuses, setStatuses] = useState([]);
+  const [statuses, setStatuses] = useState<StatusData[]>([]);
+  const [departments, setDepartments] = useState<DepartmentData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [tasksRes, prioritiesRes, statusesRes] = await Promise.all([
-          fetch(`${API_URL}/tasks`, {
-            headers: { Authorization: `Bearer ${TOKEN}` },
-          }),
-          fetch(`${API_URL}/priorities`, {
-            headers: { Authorization: `Bearer ${TOKEN}` },
-          }),
-          fetch(`${API_URL}/statuses`, {
-            headers: { Authorization: `Bearer ${TOKEN}` },
-          }),
-        ]);
+        const [tasksRes, prioritiesRes, statusesRes, departmentsRes] =
+          await Promise.all([
+            fetch(`${API_URL}/tasks`, {
+              headers: { Authorization: `Bearer ${TOKEN}` },
+            }),
+            fetch(`${API_URL}/priorities`, {
+              headers: { Authorization: `Bearer ${TOKEN}` },
+            }),
+            fetch(`${API_URL}/statuses`, {
+              headers: { Authorization: `Bearer ${TOKEN}` },
+            }),
+            fetch(`${API_URL}/departments`, {
+              headers: { Authorization: `Bearer ${TOKEN}` },
+            }),
+          ]);
 
-        if (!tasksRes.ok || !prioritiesRes.ok || !statusesRes.ok) {
+        if (
+          !tasksRes.ok ||
+          !prioritiesRes.ok ||
+          !statusesRes.ok ||
+          !departmentsRes.ok
+        ) {
           throw new Error("Failed to fetch data");
         }
 
-        const [tasksData, prioritiesData, statusesData] = await Promise.all([
-          tasksRes.json(),
-          prioritiesRes.json(),
-          statusesRes.json(),
-        ]);
+        const [tasksData, prioritiesData, statusesData, departmentsData] =
+          await Promise.all([
+            tasksRes.json(),
+            prioritiesRes.json(),
+            statusesRes.json(),
+            departmentsRes.json(),
+          ]);
 
         setTasks(tasksData);
         setPriorities(prioritiesData);
         setStatuses(statusesData);
+        setDepartments(departmentsData);
+        console.log("Departments fetched:", departmentsData);
+        console.log("Tasks fetched:", tasksData);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -53,7 +102,7 @@ const Task = () => {
     fetchData();
   }, []);
 
-  const getBorderColor = (priorityName) => {
+  const getPriorityColor = (priorityName: string) => {
     switch (priorityName.toLowerCase()) {
       case "high":
       case "მაღალი":
@@ -69,7 +118,46 @@ const Task = () => {
     }
   };
 
-  const formatDate = (dateString) => {
+  const getDepartmentColor = (departmentName: string) => {
+    switch (departmentName) {
+      case "ადმინისტრაციის დეპარტამენტი":
+        return "purple";
+      case "ადამიანური რესურსების დეპარტამენტი":
+        return "green";
+      case "ფინანსების დეპარტამენტი":
+        return "blue";
+      case "გაყიდვები და მარკეტინგის დეპარტამენტი":
+        return "orange";
+      case "ლოჯოსტიკის დეპარტამენტი":
+        return "teal";
+      case "ტექნოლოგიების დეპარტამენტი":
+        return "yellow";
+      case "მედიის დეპარტამენტი":
+        return "pink";
+      case "დიზაინერების დეპარტამენტი":
+        return "red";
+      default:
+        return "gray";
+    }
+  };
+
+  const getStatusColor = (statusName: string): TaskColor => {
+    switch (statusName) {
+      case "დასაწყები":
+        return "yellow";
+      case "პროცესში":
+        return "red";
+      case "მზად ტესტირებისთვის":
+        return "pink";
+      case "დასრულებული":
+        return "blue";
+      default:
+        console.log("Unmatched status:", statusName);
+        return "yellow";
+    }
+  };
+
+  const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const monthNames = [
       "იანვ",
@@ -90,10 +178,31 @@ const Task = () => {
     }, ${date.getFullYear()}`;
   };
 
-  const groupedTasks = [[], [], [], []];
-  tasks.forEach((task, index) => {
-    groupedTasks[index % 4].push(task);
-  });
+  const filteredTasks =
+    showAll &&
+    filters.departments.length === 0 &&
+    filters.priorities.length === 0 &&
+    filters.employees.length === 0
+      ? tasks
+      : tasks.filter((task) => {
+          const departmentMatch =
+            filters.departments.length === 0 ||
+            filters.departments.includes(task.department.name); // Use original API names
+          const priorityMatch =
+            filters.priorities.length === 0 ||
+            filters.priorities.includes(task.priority.name);
+          const employeeMatch =
+            filters.employees.length === 0 ||
+            filters.employees.includes(
+              `${task.employee.name} ${task.employee.surname}`
+            );
+
+          return departmentMatch && priorityMatch && employeeMatch;
+        });
+
+  const groupedTasks = statuses.map((status) =>
+    filteredTasks.filter((task) => task.status.id === status.id)
+  );
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -102,39 +211,48 @@ const Task = () => {
     <div className={Styles.container}>
       <TaskHeadWrapper />
       <div className={Styles.taskGrid}>
-        {groupedTasks.map((group, index) => (
-          <div key={index} className={Styles.taskColumn}>
-            {group.map((task) => (
-              <div
-                key={task.id}
-                className={clsx(
-                  Styles.task,
-                  Styles[getBorderColor(task.priority.name)]
-                )}
-              >
-                <div className={Styles.head}>
-                  <div className={Styles.buttons}>
-                    <Square priority={task.priority.name} size="small" />
-                    <Round color={getBorderColor(task.priority.name)} />
+        {statuses.map((status, index) => (
+          <div key={status.id} className={Styles.taskColumn}>
+            {groupedTasks[index].length > 0 ? (
+              groupedTasks[index].map((task) => (
+                <div
+                  key={task.id}
+                  className={clsx(
+                    Styles.task,
+                    Styles[getStatusColor(task.status.name)]
+                  )}
+                >
+                  <div className={Styles.head}>
+                    <div className={Styles.buttons}>
+                      <Square priority={task.priority.name} size="small" />
+                      <Round
+                        color={getDepartmentColor(task.department.name)}
+                        department={task.department.name} // Round.tsx renames it
+                      />
+                    </div>
+                    <div className={Styles.date}>
+                      {formatDate(task.due_date)}
+                    </div>
                   </div>
-                  <div className={Styles.date}>{formatDate(task.due_date)}</div>
-                </div>
-                <div className={Styles.middle}>
-                  <h2>{task.name}</h2>
-                  <p>{task.description}</p>
-                </div>
-                <div className={Styles.bottom}>
-                  <img
-                    src="/asserts/avatr.svg"
-                    alt={`${task.employee.name} ${task.employee.surname}`}
-                  />
-                  <div className={Styles.comments}>
-                    <img src="/asserts/Comments.svg" alt="comment" />
-                    <p>8</p>
+                  <div className={Styles.middle}>
+                    <h2>{task.name}</h2>
+                    <p>{task.description}</p>
+                  </div>
+                  <div className={Styles.bottom}>
+                    <img
+                      src="/asserts/avatr.svg"
+                      alt={`${task.employee.name} ${task.employee.surname}`}
+                    />
+                    <div className={Styles.comments}>
+                      <img src="/asserts/Comments.svg" alt="comment" />
+                      <p>8</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div className={Styles.emptyColumn}>No tasks</div>
+            )}
           </div>
         ))}
       </div>

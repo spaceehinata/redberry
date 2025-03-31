@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
-import styles from "./Dropdown.module.scss"; // Adjust path as needed
-import Button1 from "../Buttons/Button1/Button1"; // Adjust path as needed
+import styles from "./Dropdown.module.scss";
+import Button1 from "../Buttons/Button1/Button1";
 
 interface OptionData {
   id: number;
@@ -27,16 +27,16 @@ const Dropdown: React.FC<{
   const [checkedItems, setCheckedItems] = useState<boolean[][]>([]);
   const [options] = useState<string[]>([
     "დეპარტამენტი",
-    "სტატუსი",
+    "პრიორიტეტი",
     "თანამშრომელი",
-  ]);
+  ]); // Removed "სტატუსი"
   const [content, setContent] = useState<OptionData[][]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const endpoints = ["/departments", "/statuses", "/employees"];
+        const endpoints = ["/departments", "/priorities", "/employees"]; // Removed "/statuses"
         const responses = await Promise.all(
           endpoints.map((endpoint) =>
             fetch(`${API_URL}${endpoint}`, {

@@ -5,7 +5,7 @@
   flex-direction: column;
   gap: 30px;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
   margin-left: 120px;
   margin-right: 120px;
 }
@@ -23,7 +23,7 @@
 }
 
 .task {
-  width: 340PX;
+  width: 340px;
   height: 177px;
   border-radius: 15px;
   padding: 20px;
@@ -84,7 +84,9 @@
   font-size: 14px;
   color: $textColor;
 }
-
+.emptyColumn {
+  width: 381px;
+}
 .yellow {
   border-color: $yellow;
 }
