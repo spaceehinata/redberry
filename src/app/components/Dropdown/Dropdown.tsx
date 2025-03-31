@@ -2,24 +2,30 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
-import styles from "../Dropdown/Dropdown.module.scss";
-import Button1 from "../Buttons/Button1/Button1";
+import styles from "./Dropdown.module.scss"; // Adjust path as needed
+import Button1 from "../Buttons/Button1/Button1"; // Adjust path as needed
 
 interface OptionData {
   id: number;
   name: string;
-  surname?: string; 
-  avatar?: string;
+}
+
+interface FilterState {
+  departments: string[];
+  priorities: string[];
+  employees: string[];
 }
 
 const API_URL = "https://momentum.redberryinternship.ge/api";
 const TOKEN = "9e85a2d7-4757-4769-9e4e-f7d01e4f8d08";
 
-const Dropdown: React.FC = () => {
+const Dropdown: React.FC<{
+  onFilterChange: (filters: FilterState) => void;
+}> = ({ onFilterChange }) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [visibleIndex, setVisibleIndex] = useState<number | null>(null);
   const [checkedItems, setCheckedItems] = useState<boolean[][]>([]);
-  const [options, setOptions] = useState<string[]>([
+  const [options] = useState<string[]>([
     "დეპარტამენტი",
     "სტატუსი",
     "თანამშრომელი",
@@ -39,6 +45,7 @@ const Dropdown: React.FC = () => {
           )
         );
 
+        console.log("Fetched data:", responses);
         setContent(responses);
         setCheckedItems(responses.map((group) => group.map(() => false)));
       } catch (error) {
@@ -62,6 +69,38 @@ const Dropdown: React.FC = () => {
           : group
       )
     );
+  };
+
+  const handleApplyFilters = () => {
+    if (!content.length || !checkedItems.length) {
+      console.log("No content or checked items available yet");
+      return;
+    }
+
+    const newFilters: FilterState = {
+      departments:
+        visibleIndex === 0
+          ? content[0]
+              ?.filter((_, idx) => checkedItems[0]?.[idx])
+              .map((item) => item.name) || []
+          : [],
+      priorities:
+        visibleIndex === 1
+          ? content[1]
+              ?.filter((_, idx) => checkedItems[1]?.[idx])
+              .map((item) => item.name) || []
+          : [],
+      employees:
+        visibleIndex === 2
+          ? content[2]
+              ?.filter((_, idx) => checkedItems[2]?.[idx])
+              .map((item) => item.name) || []
+          : [],
+    };
+
+    console.log("Applying filters:", newFilters);
+    onFilterChange(newFilters);
+    setVisibleIndex(null); // Close the dropdown
   };
 
   useEffect(() => {
@@ -99,26 +138,18 @@ const Dropdown: React.FC = () => {
 
       {visibleIndex !== null && (
         <div className={styles.dropdownMenu}>
-          {content[visibleIndex].map((item, idx) => (
+          {content[visibleIndex]?.map((item, idx) => (
             <label key={idx} className={styles.checkbox}>
               <input
                 type="checkbox"
-                checked={checkedItems[visibleIndex][idx]}
+                checked={checkedItems[visibleIndex]?.[idx] || false}
                 onChange={() => toggleCheckbox(visibleIndex, idx)}
               />
-              {visibleIndex === 2 ? ( // For employees
-                <div className={styles.employeeItem}>
-                  <img src={item.avatar} alt={item.name} className={styles.avatar} />
-                  <span>{item.name} {item.surname}</span>
-                </div>
-              ) : (
-                item.name
-              )}
+              {item.name}
             </label>
           ))}
-
           <div className={styles.selectButton}>
-            <Button1 text="არჩევა" />
+            <Button1 text="არჩევა" onClick={handleApplyFilters} />
           </div>
         </div>
       )}

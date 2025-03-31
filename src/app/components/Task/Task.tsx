@@ -19,9 +19,15 @@ const Task = () => {
     const fetchData = async () => {
       try {
         const [tasksRes, prioritiesRes, statusesRes] = await Promise.all([
-          fetch(`${API_URL}/tasks`, { headers: { Authorization: `Bearer ${TOKEN}` } }),
-          fetch(`${API_URL}/priorities`, { headers: { Authorization: `Bearer ${TOKEN}` } }),
-          fetch(`${API_URL}/statuses`, { headers: { Authorization: `Bearer ${TOKEN}` } }),
+          fetch(`${API_URL}/tasks`, {
+            headers: { Authorization: `Bearer ${TOKEN}` },
+          }),
+          fetch(`${API_URL}/priorities`, {
+            headers: { Authorization: `Bearer ${TOKEN}` },
+          }),
+          fetch(`${API_URL}/statuses`, {
+            headers: { Authorization: `Bearer ${TOKEN}` },
+          }),
         ]);
 
         if (!tasksRes.ok || !prioritiesRes.ok || !statusesRes.ok) {
@@ -49,17 +55,39 @@ const Task = () => {
 
   const getBorderColor = (priorityName) => {
     switch (priorityName.toLowerCase()) {
-      case "high": case "მაღალი": return "pink";
-      case "medium": case "საშუალო": return "yellow";
-      case "low": case "დაბალი": return "blue";
-      default: return "red";
+      case "high":
+      case "მაღალი":
+        return "pink";
+      case "medium":
+      case "საშუალო":
+        return "yellow";
+      case "low":
+      case "დაბალი":
+        return "blue";
+      default:
+        return "red";
     }
   };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const monthNames = ["იანვ", "თებ", "მარ", "აპრ", "მაი", "ივნ", "ივლ", "აგვ", "სექ", "ოქტ", "ნოე", "დეკ"];
-    return `${date.getDate()} ${monthNames[date.getMonth()]}, ${date.getFullYear()}`;
+    const monthNames = [
+      "იანვ",
+      "თებ",
+      "მარ",
+      "აპრ",
+      "მაი",
+      "ივნ",
+      "ივლ",
+      "აგვ",
+      "სექ",
+      "ოქტ",
+      "ნოე",
+      "დეკ",
+    ];
+    return `${date.getDate()} ${
+      monthNames[date.getMonth()]
+    }, ${date.getFullYear()}`;
   };
 
   const groupedTasks = [[], [], [], []];
@@ -77,7 +105,13 @@ const Task = () => {
         {groupedTasks.map((group, index) => (
           <div key={index} className={Styles.taskColumn}>
             {group.map((task) => (
-              <div key={task.id} className={clsx(Styles.task, Styles[getBorderColor(task.priority.name)])}>
+              <div
+                key={task.id}
+                className={clsx(
+                  Styles.task,
+                  Styles[getBorderColor(task.priority.name)]
+                )}
+              >
                 <div className={Styles.head}>
                   <div className={Styles.buttons}>
                     <Square priority={task.priority.name} size="small" />
@@ -90,7 +124,10 @@ const Task = () => {
                   <p>{task.description}</p>
                 </div>
                 <div className={Styles.bottom}>
-                  <img src="/asserts/avatr.svg" alt={`${task.employee.name} ${task.employee.surname}`} />
+                  <img
+                    src="/asserts/avatr.svg"
+                    alt={`${task.employee.name} ${task.employee.surname}`}
+                  />
                   <div className={Styles.comments}>
                     <img src="/asserts/Comments.svg" alt="comment" />
                     <p>8</p>
