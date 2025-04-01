@@ -8,6 +8,8 @@ import Button1 from "../Buttons/Button1/Button1";
 interface OptionData {
   id: number;
   name: string;
+  surname?: string;
+  avatar?: string;
 }
 
 interface FilterState {
@@ -29,14 +31,14 @@ const Dropdown: React.FC<{
     "დეპარტამენტი",
     "პრიორიტეტი",
     "თანამშრომელი",
-  ]); // Removed "სტატუსი"
+  ]);
   const [content, setContent] = useState<OptionData[][]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const endpoints = ["/departments", "/priorities", "/employees"]; // Removed "/statuses"
+        const endpoints = ["/departments", "/priorities", "/employees"];
         const responses = await Promise.all(
           endpoints.map((endpoint) =>
             fetch(`${API_URL}${endpoint}`, {
@@ -54,11 +56,15 @@ const Dropdown: React.FC<{
     };
 
     fetchData();
-  }, []);
+  }, []); // Empty dependency array ensures this effect only runs once on mount
 
   const handleClick = (index: number) => {
     setSelectedIndex(index === selectedIndex ? null : index);
     setVisibleIndex(index === visibleIndex ? null : index);
+    // Clear previously selected checkboxes when the menu is opened
+    if (index !== visibleIndex) {
+      setCheckedItems(content.map((group) => group.map(() => false)));
+    }
   };
 
   const toggleCheckbox = (categoryIndex: number, itemIndex: number) => {
@@ -94,13 +100,13 @@ const Dropdown: React.FC<{
         visibleIndex === 2
           ? content[2]
               ?.filter((_, idx) => checkedItems[2]?.[idx])
-              .map((item) => item.name) || []
+              .map((item) => `${item.name} ${item.surname}`) || []
           : [],
     };
 
     console.log("Applying filters:", newFilters);
     onFilterChange(newFilters);
-    setVisibleIndex(null); // Close the dropdown
+    setVisibleIndex(null);
   };
 
   useEffect(() => {
@@ -110,6 +116,8 @@ const Dropdown: React.FC<{
         !dropdownRef.current.contains(event.target as Node)
       ) {
         setVisibleIndex(null);
+        // Reset the checkboxes when the menu is closed
+        setCheckedItems(content.map((group) => group.map(() => false)));
       }
     };
 
@@ -117,7 +125,7 @@ const Dropdown: React.FC<{
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, []); // Dependency on empty array ensures the effect is only run once
 
   return (
     <div className={styles.dropdown} ref={dropdownRef}>
@@ -145,7 +153,18 @@ const Dropdown: React.FC<{
                 checked={checkedItems[visibleIndex]?.[idx] || false}
                 onChange={() => toggleCheckbox(visibleIndex, idx)}
               />
-              {item.name}
+              {visibleIndex === 2 ? (
+                <div className={styles.employeeInfo}>
+                  <img
+                    src={item.avatar}
+                    alt={`${item.name} ${item.surname}`}
+                    className={styles.avatar}
+                  />
+                  <span>{`${item.name} ${item.surname}`}</span>
+                </div>
+              ) : (
+                item.name
+              )}
             </label>
           ))}
           <div className={styles.selectButton}>

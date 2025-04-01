@@ -1,23 +1,27 @@
 "use client";
-import { useState } from "react";
-import styles from "./Form.module.scss"; 
-import DepartmentDropdown from "../DepartmentDropDown/DepartmentDropdown";
+import React, { useState } from "react";
+import styles from "./Name.module.scss";
 
-const InputField = ({ label }: { label: string }) => {
-  const [value, setValue] = useState("");
+interface NameInputProps {
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const NameInput: React.FC<NameInputProps> = ({ label, value, onChange }) => {
   const isValid = value.length >= 2 && value.length <= 255;
 
   return (
     <div className={styles.inputContainer}>
-      <label>{label}*</label>
+      <label>{label}</label>
       <div className={styles.inputWrapper}>
         <input
           type="text"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={onChange}
           className={isValid || value.length === 0 ? styles.valid : styles.invalid}
+          required
         />
-        <img src="/asserts/information.svg" alt="info" className={styles.infoIcon} />
       </div>
       <div className={styles.validation}>
         <div className={styles.validationItem}>
@@ -51,13 +55,4 @@ const InputField = ({ label }: { label: string }) => {
   );
 };
 
-export default function Form() {
-  return (
-    <div className={styles.formContainer}>
-      <InputField label="სახელი" />
-      <InputField label="სახელი" />
-      <InputField label="სახელი" />
-      <InputField label="სახელი" />
-    </div>
-  );
-}
+export default NameInput;

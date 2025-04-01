@@ -1,14 +1,23 @@
+// Button3.tsx
 import React from "react";
 import styles from "./Button3.module.scss";
 
-type Props = {};
+type Button3Props = {
+  text: string;
+  onClick: () => void; // onClick no parameters
+  disabled?: boolean;
+};
 
-const Button2 = (props: Props) => {
+const Button3 = ({ text, onClick, disabled }: Button3Props) => {
   return (
-    <div className={styles.button}>
-      <p>+</p> შექმენი ახალი დავალება
-    </div>
+    <button
+      className={styles.button}
+      onClick={onClick} // Directly use the function
+      disabled={disabled}
+    >
+      {text}
+    </button>
   );
 };
 
-export default Button2;
+export default Button3;

@@ -1,4 +1,5 @@
 @import "../../colors.scss";
+
 .header-wrapper {
   display: flex;
   gap: 52px;
@@ -20,21 +21,24 @@
   font-size: 20px;
   line-height: 100%;
   letter-spacing: 0%;
-  color: $white;
+  color: #ffffff;
 }
 
 .yellow {
-  background-color: $yellow;
+  background-color: #F7BC30;
 }
 
 .red {
-  background-color: $red;
+  background-color: #FB5607;
 }
 
 .pink {
-  background-color: $pink;
+  background-color: #FF006E;
 }
 
 .blue {
-  background-color: $blue;
+  background-color: #3A86FF;
+}
+.gray {
+  background-color: #9e9e9e;
 }

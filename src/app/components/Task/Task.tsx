@@ -15,9 +15,10 @@ interface TaskData {
   description: string;
   due_date: string;
   priority: { name: string };
-  employee: { name: string; surname: string };
+  employee: { name: string; surname: string; avatar?: string }; // Add avatar field here
   department: { name: string };
   status: { id: number; name: string };
+  
 }
 
 interface DepartmentData {
@@ -79,12 +80,7 @@ const Task: React.FC<TaskProps> = ({
         }
 
         const [tasksData, prioritiesData, statusesData, departmentsData] =
-          await Promise.all([
-            tasksRes.json(),
-            prioritiesRes.json(),
-            statusesRes.json(),
-            departmentsRes.json(),
-          ]);
+          await Promise.all([tasksRes.json(), prioritiesRes.json(), statusesRes.json(), departmentsRes.json()]);
 
         setTasks(tasksData);
         setPriorities(prioritiesData);
@@ -92,8 +88,12 @@ const Task: React.FC<TaskProps> = ({
         setDepartments(departmentsData);
         console.log("Departments fetched:", departmentsData);
         console.log("Tasks fetched:", tasksData);
-      } catch (err) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred");
+        }
       } finally {
         setLoading(false);
       }
@@ -173,9 +173,7 @@ const Task: React.FC<TaskProps> = ({
       "ნოე",
       "დეკ",
     ];
-    return `${date.getDate()} ${
-      monthNames[date.getMonth()]
-    }, ${date.getFullYear()}`;
+    return `${date.getDate()} ${monthNames[date.getMonth()]}, ${date.getFullYear()}`;
   };
 
   const filteredTasks =
@@ -187,7 +185,7 @@ const Task: React.FC<TaskProps> = ({
       : tasks.filter((task) => {
           const departmentMatch =
             filters.departments.length === 0 ||
-            filters.departments.includes(task.department.name); // Use original API names
+            filters.departments.includes(task.department.name);
           const priorityMatch =
             filters.priorities.length === 0 ||
             filters.priorities.includes(task.priority.name);
@@ -226,8 +224,7 @@ const Task: React.FC<TaskProps> = ({
                     <div className={Styles.buttons}>
                       <Square priority={task.priority.name} size="small" />
                       <Round
-                        color={getDepartmentColor(task.department.name)}
-                        department={task.department.name} // Round.tsx renames it
+                        department={task.department.name} // Only department name is passed
                       />
                     </div>
                     <div className={Styles.date}>
@@ -239,10 +236,11 @@ const Task: React.FC<TaskProps> = ({
                     <p>{task.description}</p>
                   </div>
                   <div className={Styles.bottom}>
-                    <img
-                      src="/asserts/avatr.svg"
-                      alt={`${task.employee.name} ${task.employee.surname}`}
-                    />
+                  <img
+                    src={task.employee.avatar || "/asserts/avatar.svg"}
+                    alt={`${task.employee.name} ${task.employee.surname}`}
+                    className={Styles.avatar}
+                  />
                     <div className={Styles.comments}>
                       <img src="/asserts/Comments.svg" alt="comment" />
                       <p>8</p>

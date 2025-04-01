@@ -1,0 +1,90 @@
+.modalOverlay {
+    // position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+
+  }
+  .closeButton {
+    border: none;
+    background-color: #fff;
+    cursor: pointer;
+    display: flex;
+    position: absolute; 
+    right: 50px;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  .modal {
+    position: absolute;
+    background: white;
+    width: 813px;
+    height: 666px;
+    top: 118px;
+    left: 503px;
+    border-radius: 10px;
+    padding-top: 40px;
+    padding-right: 50px;
+    padding-bottom: 60px;
+    padding-left: 50px;
+    gap: 37px;
+    border: 1px solid #ccc;
+
+  }
+  .h2{
+    font-family: FiraGO;
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+
+  }
+  .formRow{
+    display: flex;
+    flex-direction: row;
+    gap: 45px;
+    margin-bottom: 45px;
+  }
+  .name{
+    font-family: FiraGO;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    margin-bottom: 8px;
+  }
+  .photoUpload{
+    margin-bottom: 45px;
+  }
+  .buttonGroup{
+    display: flex;
+    flex-direction: row;
+    gap: 22px;
+    margin-top: 30px;
+    justify-content: flex-end;
+  }
+
+  .dropdownContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .error {
+    color: red;
+    margin: 10px 0;
+    text-align: center;
+  }
+  
+  .success {
+    color: green;
+    margin: 10px 0;
+    text-align: center;
+  } 

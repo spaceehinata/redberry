@@ -1,18 +1,25 @@
 "use client";
 
 import React, { useState } from "react";
-import styles from "../PhotoUpload/PhotoUpload.module.scss";
+import styles from "./PhotoUpload.module.scss"; 
 
-const ProfilePhotoUploader: React.FC = () => {
+interface ProfilePhotoUploaderProps {
+  onPhotoChange: (file: File) => void;
+}
+
+const ProfilePhotoUploader: React.FC<ProfilePhotoUploaderProps> = ({ onPhotoChange }) => {
   const [image, setImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      const reader = new FileReader();
+      setSelectedFile(file); // Store the File object
+      onPhotoChange(file);   // Pass the File to the parent
 
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result as string);
+        setImage(reader.result as string); // Set preview image
       };
       reader.readAsDataURL(file);
     }
@@ -20,6 +27,8 @@ const ProfilePhotoUploader: React.FC = () => {
 
   const removeImage = () => {
     setImage(null);
+    setSelectedFile(null);
+    // Optionally, you could call onPhotoChange(null) here if the parent needs to know the file was removed
   };
 
   return (

@@ -1,4 +1,4 @@
-"use client"; // Required for client-side fetching
+"use client";
 
 import React, { useEffect, useState } from "react";
 import styles from "./Square.module.scss";
@@ -53,7 +53,7 @@ const Square = ({ priority, size, icon, label }: Props) => {
   const getPriorityDetails = (priorityName: string) => {
     const priorityData = priorities.find((p) => p.name === priorityName);
     if (!priorityData) {
-      return { icon: "/asserts/Medium.svg", label: "Medium", color: "yellow" }; // Fallback
+      return { icon: "/asserts/Medium.svg", label: "Medium", color: "yellow" }; 
     }
 
     switch (priorityName) {

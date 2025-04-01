@@ -1,16 +1,19 @@
-// DepartmentDropdown.tsx
 import React, { useState, useEffect } from "react";
-import styles from "./DepartmentDropdown.module.scss";
+import styles from "./DepartmetDropDown.module.scss";
 
 interface Department {
   id: number;
   name: string;
 }
 
+interface DepartmentDropdownProps {
+  onDepartmentChange: (departmentId: number) => void; // Change to number
+}
+
 const API_URL = "https://momentum.redberryinternship.ge/api";
 const TOKEN = "9e85a2d7-4757-4769-9e4e-f7d01e4f8d08";
 
-const DepartmentDropdown: React.FC = () => {
+const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({ onDepartmentChange }) => {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [selectedDepartment, setSelectedDepartment] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -39,16 +42,16 @@ const DepartmentDropdown: React.FC = () => {
   };
 
   const handleSelect = (department: Department) => {
-    setSelectedDepartment(department.name);
+    setSelectedDepartment(department.name); // Display name in UI
+    onDepartmentChange(department.id); // Pass ID to parent
     setIsOpen(false);
   };
 
   return (
     <div className={styles.dropdownContainer}>
-      <label htmlFor="department">განყოფილება*</label>
       <div className={styles.dropdown} onClick={toggleDropdown}>
         <div className={styles.dropdownSelected}>
-          {selectedDepartment || "განყოფილება მიუთითეთ აქ"}
+          {selectedDepartment || "დეპარტამენტი მიუთითეთ აქ"}
         </div>
         <img
           src="/asserts/Shape.svg"

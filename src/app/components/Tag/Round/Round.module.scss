@@ -1,4 +1,3 @@
-@import "../../../colors.scss";
 .button {
   display: flex;
   align-items: center;
@@ -7,7 +6,6 @@
   transition: background 0.3s ease, color 0.3s ease;
   font-family: FiraGO;
   font-weight: 400;
-  font-size: 12px;
   line-height: 100%;
   letter-spacing: 0%;
   border: none;
@@ -22,28 +20,33 @@
   padding-left: 9px;
   gap: 10px;
   cursor: pointer;
+  color: #ffffff;
+}
 
-  &.pink {
-    background: $designButtonColor;
-    color: $white;
-  }
+.red {
+  background-color: #fa4d4d;
+}
 
-  &.orange {
-    background: $MarketingButtonColor;
-    color: $white;
-  }
+.green {
+  background-color: #08a508;
+}
 
-  &.blue {
-    background: $logisticsButtonColor;
-    color: $white;
-  }
+.blue {
+  background-color: rgba(137, 182, 255, 1);
+}
 
-  &.yellow {
-    background: $itButtonColor;
-    color: $white;
-  }
+.yellow {
+  background-color: rgba(255, 216, 109, 1);
+}
 
-  &:hover {
-    opacity: 0.8;
-  }
+.purple {
+  background-color: rgba(131, 56, 236, 1);
+}
+
+.orange {
+  background-color: rgba(253, 154, 106, 1);
+}
+
+.gray {
+  background-color: #9e9e9e;
 }

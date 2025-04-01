@@ -8,7 +8,7 @@ type Props = {
     priorities: string[];
     employees: string[];
   };
-  onRemoveFilter: (category: string, value: string) => void;
+  onRemoveFilter: (category: "departments" | "priorities" | "employees", value: string) => void;
 };
 
 const Filter = ({ filters, onRemoveFilter }: Props) => {
@@ -28,7 +28,7 @@ const Filter = ({ filters, onRemoveFilter }: Props) => {
             width={14}
             height={14}
             alt="Remove filter"
-            onClick={() => onRemoveFilter(category, value)}
+            onClick={() => onRemoveFilter(category as "departments" | "priorities" | "employees", value)} // Type assertion
           />
         </div>
       ))}

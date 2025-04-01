@@ -2,18 +2,18 @@ import React from "react";
 import styles from "./Button2.module.scss";
 
 type Props = {
-  onClick?: () => void;          // Optional click handler
-  disabled?: boolean;           // Optional disabled state
-  children?: React.ReactNode;   // Allow custom content
+  onClick?: () => void;
+  disabled?: boolean;
+  children?: React.ReactNode;
 };
 
-const Button2 = ({ 
-  onClick, 
-  disabled = false, 
-  children = "თანამშრომლის შექმნა" 
+const Button2 = ({
+  onClick,
+  disabled = false,
+  children = "თანამშრომლის შექმნა",
 }: Props) => {
   return (
-    <button 
+    <button
       className={styles.button}
       onClick={onClick}
       disabled={disabled}

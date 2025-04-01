@@ -2,11 +2,15 @@
 
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
-import { TaskColor } from "@/types";
 import styles from "./TaskHead.module.scss";
 
-const API_URL = "https://momentum.redberryinternship.ge/api";
-const TOKEN = "9e85a2d7-4757-4769-9e4e-f7d01e4f8d08";
+// Enum for task colors
+export enum TaskColor {
+  Yellow = "yellow",
+  Red = "red",
+  Pink = "pink",
+  Blue = "blue",
+}
 
 interface StatusData {
   id: number;
@@ -21,6 +25,9 @@ type TaskHeadProps = {
 const TaskHead = ({ color, text }: TaskHeadProps) => {
   return <div className={clsx(styles.header, styles[color])}>{text}</div>;
 };
+
+const API_URL = "https://momentum.redberryinternship.ge/api";
+const TOKEN = "9e85a2d7-4757-4769-9e4e-f7d01e4f8d08";
 
 const TaskHeadWrapper = () => {
   const [statuses, setStatuses] = useState<StatusData[]>([]);
@@ -41,8 +48,13 @@ const TaskHeadWrapper = () => {
         const statusesData = await response.json();
         setStatuses(statusesData);
         console.log("Statuses fetched:", statusesData);
-      } catch (err) {
-        setError(err.message);
+      } catch (err: unknown) {
+        // Type assertion to Error type
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred");
+        }
       } finally {
         setLoading(false);
       }
@@ -54,16 +66,16 @@ const TaskHeadWrapper = () => {
   const getStatusColor = (statusName: string): TaskColor => {
     switch (statusName) {
       case "დასაწყები":
-        return "yellow";
+        return TaskColor.Yellow;
       case "პროცესში":
-        return "red";
+        return TaskColor.Red;
       case "მზად ტესტირებისთვის":
-        return "pink";
+        return TaskColor.Pink;
       case "დასრულებული":
-        return "blue";
+        return TaskColor.Blue;
       default:
         console.log("Unmatched status:", statusName);
-        return "yellow";
+        return TaskColor.Red; 
     }
   };
 

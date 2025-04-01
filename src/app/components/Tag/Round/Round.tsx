@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import React from "react";
-import { TagColor } from "@/types";
 import styles from "./Round.module.scss";
 
 const customDepartmentNames: { [key: string]: string } = {
@@ -14,14 +13,32 @@ const customDepartmentNames: { [key: string]: string } = {
   "დიზაინერების დეპარტამენტი": "Design",
 };
 
+type TagColor = "red" | "green" | "blue" | "yellow" | "purple" | "orange" | "gray";
+
 type Props = {
-  color: TagColor;
   department: string;
 };
 
-const Round = ({ color, department }: Props) => {
+const customDepartmentColors: { [key: string]: TagColor } = {
+  "ადმინისტრაციის დეპარტამენტი": "red",
+  "ადამიანური რესურსების დეპარტამენტი": "green",
+  "ფინანსების დეპარტამენტი": "blue",
+  "გაყიდვები და მარკეტინგის დეპარტამენტი": "yellow",
+  "ლოჯოსტიკის დეპარტამენტი": "purple",
+  "ტექნოლოგიების დეპარტამენტი": "orange",
+  "მედიის დეპარტამენტი": "gray",
+  "დიზაინერების დეპარტამენტი": "green",
+};
+
+const Round: React.FC<Props> = ({ department }) => {
   const customName = customDepartmentNames[department] || department;
-  return <div className={clsx(styles.button, styles[color])}>{customName}</div>;
+  const color = customDepartmentColors[department] || "blue"; // Default to blue if not found
+
+  return (
+    <div className={clsx(styles.button, styles[color])}>
+      {customName}
+    </div>
+  );
 };
 
 export default Round;
