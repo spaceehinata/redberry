@@ -4,7 +4,6 @@ import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 import styles from "./TaskHead.module.scss";
 
-// Enum for task colors
 export enum TaskColor {
   Yellow = "yellow",
   Red = "red",
