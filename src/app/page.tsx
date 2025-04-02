@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import Filter from "./components/Filter/Filter";
-import Dropdown from "./components/Dropdown/Dropdown";
-import Header from "./components/Header/Header";
-import Task from "./components/Task/Task";
-import AddCoworker from "./components/AddCoworker/AddCoworker"; 
+import Filter from "../components/Filter/Filter";
+import Dropdown from "../components/Dropdown/Dropdown";
+import Header from "../components/Header/Header";
+import Task from "../components/Task/Task";
+import AddCoworker from "../components/AddCoworker/AddCoworker";
+import TaskHeadWrapper from "../components/TaskHead/TaskHeadWrapper"; // Importe TaskHeadWrapper
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -26,7 +27,10 @@ export default function Page() {
     setFilters(newFilters);
   };
 
-  const handleRemoveFilter = (category: "departments" | "priorities" | "employees", value: string) => {
+  const handleRemoveFilter = (
+    category: "departments" | "priorities" | "employees",
+    value: string
+  ) => {
     setFilters((prev) => ({
       ...prev,
       [category]: prev[category].filter((item: string) => item !== value),
@@ -49,6 +53,8 @@ export default function Page() {
       <h1 className={styles.title}>დავალებების გვერდი</h1>
       <Dropdown onFilterChange={handleFilterChange} />
       <Filter filters={filters} onRemoveFilter={handleRemoveFilter} />
+      {/* Add TaskHeadWrapper here */}
+      <TaskHeadWrapper />
       <div className={styles.taskWrapper}>
         <Task showAll={true} filters={filters} />
       </div>
