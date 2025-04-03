@@ -19,14 +19,7 @@ const CheckboxWithText: React.FC<CheckboxWithTextProps> = ({
 
   return (
     <div className={styles.checkboxWithText}>
-      <Checkbox checked={checked} onChange={onChange} label={label} />
-
-      {isEmployee && item.avatar && (
-        <>
-          <img src={item.avatar} alt={label} className={styles.avatar} />
-          <span className={styles.name}>{label}</span>
-        </>
-      )}
+      <Checkbox checked={checked} onChange={onChange} label={label} avatar={isEmployee ? item.avatar : undefined} />
     </div>
   );
 };

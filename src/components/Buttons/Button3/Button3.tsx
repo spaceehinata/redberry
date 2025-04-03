@@ -4,7 +4,7 @@ import styles from "./Button3.module.scss";
 
 type Button3Props = {
   text: string;
-  onClick: () => void; // onClick no parameters
+  onClick: () => void; 
   disabled?: boolean;
 };
 
@@ -12,7 +12,7 @@ const Button3 = ({ text, onClick, disabled }: Button3Props) => {
   return (
     <button
       className={styles.button}
-      onClick={onClick} // Directly use the function
+      onClick={onClick} 
       disabled={disabled}
     >
       {text}

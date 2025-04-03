@@ -1,3 +1,4 @@
+// src/components/Task/Task.tsx
 import React, { useEffect, useState } from "react";
 import Styles from "./Task.module.scss";
 import Square from "../Tag/Square/Square";
@@ -5,6 +6,7 @@ import Round from "../Tag/Round/Round";
 import TaskHeadWrapper from "../TaskHead/TaskHead";
 import { clsx } from "clsx";
 import { TaskColor } from "@/types";
+import Link from "next/link"; 
 
 const API_URL = "https://momentum.redberryinternship.ge/api";
 const TOKEN = "9e85a2d7-4757-4769-9e4e-f7d01e4f8d08";
@@ -15,10 +17,9 @@ interface TaskData {
   description: string;
   due_date: string;
   priority: { name: string };
-  employee: { name: string; surname: string; avatar?: string }; // Add avatar field here
+  employee: { name: string; surname: string; avatar?: string };
   department: { name: string };
   status: { id: number; name: string };
-  
 }
 
 interface DepartmentData {
@@ -160,18 +161,7 @@ const Task: React.FC<TaskProps> = ({
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const monthNames = [
-      "იანვ",
-      "თებ",
-      "მარ",
-      "აპრ",
-      "მაი",
-      "ივნ",
-      "ივლ",
-      "აგვ",
-      "სექ",
-      "ოქტ",
-      "ნოე",
-      "დეკ",
+      "იანვ", "თებ", "მარ", "აპრ", "მაი", "ივნ", "ივლ", "აგვ", "სექ", "ოქტ", "ნოე", "დეკ"
     ];
     return `${date.getDate()} ${monthNames[date.getMonth()]}, ${date.getFullYear()}`;
   };
@@ -213,7 +203,8 @@ const Task: React.FC<TaskProps> = ({
           <div key={status.id} className={Styles.taskColumn}>
             {groupedTasks[index].length > 0 ? (
               groupedTasks[index].map((task) => (
-                <div
+                <Link
+                  href={`/taskpage/${task.id}`}  // Use Next.js Link with href
                   key={task.id}
                   className={clsx(
                     Styles.task,
@@ -236,17 +227,17 @@ const Task: React.FC<TaskProps> = ({
                     <p>{task.description}</p>
                   </div>
                   <div className={Styles.bottom}>
-                  <img
-                    src={task.employee.avatar || "/asserts/avatar.svg"}
-                    alt={`${task.employee.name} ${task.employee.surname}`}
-                    className={Styles.avatar}
-                  />
+                    <img
+                      src={task.employee.avatar || "/asserts/avatar.svg"}
+                      alt={`${task.employee.name} ${task.employee.surname}`}
+                      className={Styles.avatar}
+                    />
                     <div className={Styles.comments}>
                       <img src="/asserts/Comments.svg" alt="comment" />
                       <p>8</p>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))
             ) : (
               <div className={Styles.emptyColumn}>No tasks</div>

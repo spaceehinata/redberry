@@ -8,7 +8,8 @@ import Task from "../components/Task/Task";
 import AddCoworker from "../components/AddCoworker/AddCoworker";
 import TaskHeadWrapper from "../components/TaskHead/TaskHeadWrapper"; // Importe TaskHeadWrapper
 import styles from "./page.module.css";
-
+import Comments from "@/components/Comments/Comments";
+// import StatusDropdown from "@/components/StatusDropdown/StatusDropdown";
 export default function Page() {
   const [filters, setFilters] = useState({
     departments: [] as string[],
@@ -49,11 +50,12 @@ export default function Page() {
 
   return (
     <div className={styles.pageContainer}>
+      <Comments></Comments>
+      {/* <StatusDropdown /> */}
       <Header onOpenModal={handleOpenModal} />
       <h1 className={styles.title}>დავალებების გვერდი</h1>
       <Dropdown onFilterChange={handleFilterChange} />
       <Filter filters={filters} onRemoveFilter={handleRemoveFilter} />
-      {/* Add TaskHeadWrapper here */}
       <TaskHeadWrapper />
       <div className={styles.taskWrapper}>
         <Task showAll={true} filters={filters} />

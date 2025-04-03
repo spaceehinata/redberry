@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchStatuses, StatusData } from "@/api/Statuses"; // impoert API
+import { fetchStatuses, StatusData } from "@/api/Statuses";
 import TaskHead, { TaskColor } from "./TaskHead";
 import styles from "./TaskHead.module.scss";
 

@@ -4,13 +4,21 @@ import { StatusData } from "../../api/Statuses";
 
 interface StatusDropdownItemProps {
   status: StatusData;
+  onSelect: () => void;
+  isSelected: boolean;
 }
 
-const StatusDropdownItem: React.FC<StatusDropdownItemProps> = ({ status }) => {
+const StatusDropdownItem: React.FC<StatusDropdownItemProps> = ({
+  status,
+  onSelect,
+  isSelected,
+}) => {
   return (
-    <li className={styles.dropdownItem}>
-      <span className={styles.statusIndicator}></span>
-      <span>{status.name}</span>
+    <li
+      className={`${styles.dropdownItem} ${isSelected ? styles.selected : ""}`}
+      onClick={onSelect}
+    >
+      {status.name}
     </li>
   );
 };
