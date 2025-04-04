@@ -1,4 +1,3 @@
-// src/components/Task/Task.tsx
 import React, { useEffect, useState } from "react";
 import Styles from "./Task.module.scss";
 import Square from "../Tag/Square/Square";
@@ -6,7 +5,7 @@ import Round from "../Tag/Round/Round";
 import TaskHeadWrapper from "../TaskHead/TaskHead";
 import { clsx } from "clsx";
 import { TaskColor } from "@/types";
-import Link from "next/link"; 
+import Link from "next/link";
 
 const API_URL = "https://momentum.redberryinternship.ge/api";
 const TOKEN = "9e85a2d7-4757-4769-9e4e-f7d01e4f8d08";
@@ -20,6 +19,7 @@ interface TaskData {
   employee: { name: string; surname: string; avatar?: string };
   department: { name: string };
   status: { id: number; name: string };
+  commentCount?: number; // Optional comment count field
 }
 
 interface DepartmentData {
@@ -51,7 +51,11 @@ const Task: React.FC<TaskProps> = ({
   const [departments, setDepartments] = useState<DepartmentData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [commentCounts, setCommentCounts] = useState<{
+    [taskId: number]: number;
+  }>({}); // Store comment counts by task ID
 
+  // Fetch tasks, statuses, priorities, and departments
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -81,14 +85,21 @@ const Task: React.FC<TaskProps> = ({
         }
 
         const [tasksData, prioritiesData, statusesData, departmentsData] =
-          await Promise.all([tasksRes.json(), prioritiesRes.json(), statusesRes.json(), departmentsRes.json()]);
+          await Promise.all([
+            tasksRes.json(),
+            prioritiesRes.json(),
+            statusesRes.json(),
+            departmentsRes.json(),
+          ]);
 
         setTasks(tasksData);
         setPriorities(prioritiesData);
         setStatuses(statusesData);
         setDepartments(departmentsData);
-        console.log("Departments fetched:", departmentsData);
-        console.log("Tasks fetched:", tasksData);
+
+        // Fetch comment count for each task
+        const commentCounts = await fetchCommentCounts(tasksData);
+        setCommentCounts(commentCounts);
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);
@@ -102,6 +113,27 @@ const Task: React.FC<TaskProps> = ({
 
     fetchData();
   }, []);
+
+  // Fetch comment count for each task
+  const fetchCommentCounts = async (tasks: TaskData[]) => {
+    const counts: { [taskId: number]: number } = {};
+    for (const task of tasks) {
+      try {
+        const res = await fetch(`${API_URL}/tasks/${task.id}/comments`, {
+          headers: { Authorization: `Bearer ${TOKEN}` },
+        });
+        if (res.ok) {
+          const comments = await res.json();
+          counts[task.id] = comments.length;
+        } else {
+          counts[task.id] = 0; // No comments if request fails
+        }
+      } catch (err) {
+        counts[task.id] = 0; // Default to 0 if an error occurs
+      }
+    }
+    return counts;
+  };
 
   const getPriorityColor = (priorityName: string) => {
     switch (priorityName.toLowerCase()) {
@@ -161,9 +193,22 @@ const Task: React.FC<TaskProps> = ({
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const monthNames = [
-      "იანვ", "თებ", "მარ", "აპრ", "მაი", "ივნ", "ივლ", "აგვ", "სექ", "ოქტ", "ნოე", "დეკ"
+      "იანვ",
+      "თებ",
+      "მარ",
+      "აპრ",
+      "მაი",
+      "ივნ",
+      "ივლ",
+      "აგვ",
+      "სექ",
+      "ოქტ",
+      "ნოე",
+      "დეკ",
     ];
-    return `${date.getDate()} ${monthNames[date.getMonth()]}, ${date.getFullYear()}`;
+    return `${date.getDate()} ${
+      monthNames[date.getMonth()]
+    }, ${date.getFullYear()}`;
   };
 
   const filteredTasks =
@@ -204,7 +249,7 @@ const Task: React.FC<TaskProps> = ({
             {groupedTasks[index].length > 0 ? (
               groupedTasks[index].map((task) => (
                 <Link
-                  href={`/taskpage/${task.id}`}  // Use Next.js Link with href
+                  href={`/taskpage/${task.id}`}
                   key={task.id}
                   className={clsx(
                     Styles.task,
@@ -214,9 +259,7 @@ const Task: React.FC<TaskProps> = ({
                   <div className={Styles.head}>
                     <div className={Styles.buttons}>
                       <Square priority={task.priority.name} size="small" />
-                      <Round
-                        department={task.department.name} // Only department name is passed
-                      />
+                      <Round department={task.department.name} />
                     </div>
                     <div className={Styles.date}>
                       {formatDate(task.due_date)}
@@ -234,7 +277,8 @@ const Task: React.FC<TaskProps> = ({
                     />
                     <div className={Styles.comments}>
                       <img src="/asserts/Comments.svg" alt="comment" />
-                      <p>8</p>
+                      <p>{commentCounts[task.id] || 0}</p>{" "}
+                      {/* Display the comment count */}
                     </div>
                   </div>
                 </Link>

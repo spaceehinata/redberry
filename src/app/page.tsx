@@ -50,7 +50,6 @@ export default function Page() {
 
   return (
     <div className={styles.pageContainer}>
-      <Comments></Comments>
       {/* <StatusDropdown /> */}
       <Header onOpenModal={handleOpenModal} />
       <h1 className={styles.title}>დავალებების გვერდი</h1>

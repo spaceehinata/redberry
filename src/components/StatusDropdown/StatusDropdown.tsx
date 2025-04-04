@@ -3,7 +3,12 @@ import styles from "../PrioritiesDropdown/StatuesDropdown.module.scss";
 import { fetchStatuses, StatusData } from "../../api/Statuses";
 import StatusDropdownItem from "./StatusDropdownItem";
 
-const StatusDropdown = ({ title }: { title: string }) => {
+interface StatusDropdownProps {
+  title: string;
+  onChange?: (status: StatusData | null) => void; // Add onChange prop
+}
+
+const StatusDropdown = ({ title, onChange }: StatusDropdownProps) => {
   const [statuses, setStatuses] = useState<StatusData[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<StatusData | null>(null);
@@ -19,6 +24,9 @@ const StatusDropdown = ({ title }: { title: string }) => {
   const handleStatusSelect = (status: StatusData) => {
     setSelectedStatus(status);
     setIsOpen(false); // Close dropdown after selection
+    if (onChange) {
+      onChange(status); // Call the onChange event when a status is selected
+    }
   };
 
   useEffect(() => {
@@ -46,7 +54,7 @@ const StatusDropdown = ({ title }: { title: string }) => {
               key={status.id}
               status={status}
               onSelect={() => handleStatusSelect(status)}
-              isSelected={selectedStatus?.id === status.id} 
+              isSelected={selectedStatus?.id === status.id}
             />
           ))}
         </ul>

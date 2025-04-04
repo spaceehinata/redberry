@@ -7,7 +7,7 @@ export type TagColor =
   | "purple"
   | "orange"
   | "gray";
-  export type TaskColor = "yellow" | "red" | "pink" | "blue";
+export type TaskColor = "yellow" | "red" | "pink" | "blue";
 
 export type DepartmentType = { id: number; name: string };
 export type PriorityType = {
