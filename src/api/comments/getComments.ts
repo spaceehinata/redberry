@@ -8,7 +8,6 @@ export interface CommentType {
   author_avatar: string | null;
 }
 
-// Get comments for a task
 export const getComments = async (taskId: number): Promise<CommentType[]> => {
   try {
     const response = await fetch(`${API_URL}/tasks/${taskId}/comments/`, {

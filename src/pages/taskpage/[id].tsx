@@ -42,20 +42,12 @@ const TaskPage: React.FC = () => {
     fetchTaskData();
   }, [id]);
 
-  // Function to handle status update
   const handleStatusChange = (newStatus: StatusData | null) => {
     if (!task || !newStatus) return;
 
-    // Use the imported updateTaskStatus function
-    updateTaskStatus(
-      task,
-      newStatus.name, // Pass the status name (e.g., "პროცესში")
-      setTask, // Update local state
-      (updatedTask: TaskData) => {
-        console.log("Task updated successfully:", updatedTask);
-        // Optionally add more logic here if needed
-      }
-    );
+    updateTaskStatus(task, newStatus.name, setTask, (updatedTask: TaskData) => {
+      console.log("Task updated successfully:", updatedTask);
+    });
   };
 
   if (loading) return <div>Loading...</div>;
@@ -64,75 +56,89 @@ const TaskPage: React.FC = () => {
 
   return (
     <div className={Styles.container}>
-      <div className={Styles.taskHeader}>
-        <div className={Styles.taskTags}>
-          <Square priority={task.priority.name} size="small" />
-          <Round department={task.department.name} />
-        </div>
-        <h1>{task.name}</h1>
-        <p>{task.description}</p>
-      </div>
-      <div className={Styles.details}>
-        <div>
-          <p>დავალების დეტალები</p>
-        </div>
-        <div className={Styles.detailItem}>
-          <img src="/asserts/icon1.svg" alt="სტატუსი" className={Styles.icon} />
-          <div>
-            <p className={Styles.label}>სტატუსი</p>
-          </div>
-          <StatusDropdown
-            title="Task Status"
-            defaultStatus={task.status}
-            onChange={handleStatusChange} // Use the new handler
-          />
-        </div>
-
-        <div className={Styles.detailItem}>
-          <img
-            src="/asserts/icon2.svg"
-            alt="თანამშრომელი"
-            className={Styles.icon}
-          />
-          <div>
-            <p className={Styles.label}>თანამშრომელი</p>
-          </div>
-          <div className={Styles.assignee}>
-            <div className={Styles.department}>
-              <p>{task.department.name}</p>
+      <div className={Styles.twoColumnLayout}>
+        {/* Left Column: Task Details */}
+        <div className={Styles.taskDetailsColumn}>
+          <div className={Styles.taskHeader}>
+            <div className={Styles.taskTags}>
+              <Square priority={task.priority.name} size="small" />
+              <Round department={task.department.name} />
             </div>
-            <div className={Styles.employeeInfo}>
+            <h1>{task.name}</h1>
+            <p>{task.description}</p>
+          </div>
+          <div className={Styles.details}>
+            <span>დავალების დეტალები</span>
+            <div className={Styles.detailItem}>
               <img
-                src={task.employee.avatar || "/asserts/avatar.svg"}
-                alt={`${task.employee.name} ${task.employee.surname}`}
-                className={Styles.avatar}
+                src="/asserts/icon1.svg"
+                alt="სტატუსი"
+                className={Styles.icon}
               />
-              <p>
-                {task.employee.name} {task.employee.surname}
+              <div>
+                <p className={Styles.label}>სტატუსი</p>
+              </div>
+              <StatusDropdown
+                title="Task Status"
+                defaultStatus={task.status}
+                onChange={handleStatusChange}
+              />
+            </div>
+
+            <div className={Styles.detailItem}>
+              <img
+                src="/asserts/icon2.svg"
+                alt="თანამშრომელი"
+                className={Styles.icon}
+              />
+              <div>
+                <p className={Styles.label}>თანამშრომელი</p>
+              </div>
+              <div className={Styles.assignee}>
+                <div className={Styles.department}>
+                  <p>{task.department.name}</p>
+                </div>
+                <div className={Styles.employeeInfo}>
+                  <img
+                    src={task.employee.avatar || "/asserts/avatar.svg"}
+                    alt={`${task.employee.name} ${task.employee.surname}`}
+                    className={Styles.avatar}
+                  />
+                  <p>
+                    {task.employee.name} {task.employee.surname}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className={Styles.detailItem}>
+              <img
+                src="/asserts/calendar.svg"
+                alt="დავალების ვადა"
+                className={Styles.icon}
+              />
+              <div>
+                <p className={Styles.label}>დავალების ვადა</p>
+              </div>
+              <p className={Styles.value}>
+                {new Date(task.due_date).toLocaleDateString("ka-GE", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
               </p>
             </div>
           </div>
         </div>
 
-        <div className={Styles.detailItem}>
-          <img
-            src="/asserts/calendar.svg"
-            alt="დავალების ვადა"
-            className={Styles.icon}
-          />
-          <div>
-            <p className={Styles.label}>დავალების ვადა</p>
+        {/* Right Column: Comment Section */}
+        <div className={Styles.commentColumn}>
+          <Comment taskId={id as string} />
+          <div className={Styles.commentHeader}>
+            <p>კომენტარები {task.commentCount || 0}</p>
           </div>
-          <p className={Styles.value}>
-            {new Date(task.due_date).toLocaleDateString("ka-GE", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
         </div>
       </div>
-      <Comment taskId={id as string} />
     </div>
   );
 };
