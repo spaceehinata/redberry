@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link"; // Next.js Link-ის იმპორტი
 import styles from "./Header.module.scss";
 import Button2 from "../Buttons/Button2/Button2";
 import Button3 from "../Buttons/Button3/Button3";
@@ -16,8 +17,9 @@ const Header = ({ onOpenModal }: Props) => {
       <div className={styles.buttons}>
         <Button2 onClick={onOpenModal} />
         <div className={styles.Buttons}>
-          {/* Pass a no-op function if you don't need an action on the button */}
-          <Button3 text="შექმენი ახალი დავალება" onClick={() => {}} />
+          <Link href="/addtask">
+            <Button3 text="შექმენი ახალი დავალება" onClick={() => {}} />
+          </Link>
         </div>
       </div>
     </header>
