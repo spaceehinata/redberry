@@ -1,13 +1,12 @@
-// TaskPage.tsx
-
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Styles from "./TaskPage.module.scss";
-import { TaskData } from "@/types";
+import { TaskData, StatusData } from "@/types";
 import Round from "@/components/Tag/Round/Round";
 import Square from "@/components/Tag/Square/Square";
 import StatusDropdown from "@/components/StatusDropdown/StatusDropdown";
 import Comment from "@/components/Comments/Comments";
+import { updateTaskStatus } from "@/api/updateTaskStatus";
 
 const API_URL = "https://momentum.redberryinternship.ge/api";
 const TOKEN = "9e85a2d7-4757-4769-9e4e-f7d01e4f8d08";
@@ -43,6 +42,22 @@ const TaskPage: React.FC = () => {
     fetchTaskData();
   }, [id]);
 
+  // Function to handle status update
+  const handleStatusChange = (newStatus: StatusData | null) => {
+    if (!task || !newStatus) return;
+
+    // Use the imported updateTaskStatus function
+    updateTaskStatus(
+      task,
+      newStatus.name, // Pass the status name (e.g., "პროცესში")
+      setTask, // Update local state
+      (updatedTask: TaskData) => {
+        console.log("Task updated successfully:", updatedTask);
+        // Optionally add more logic here if needed
+      }
+    );
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!task) return <div>No task found</div>;
@@ -58,7 +73,6 @@ const TaskPage: React.FC = () => {
         <p>{task.description}</p>
       </div>
       <div className={Styles.details}>
-        {/* Details for task */}
         <div>
           <p>დავალების დეტალები</p>
         </div>
@@ -68,8 +82,9 @@ const TaskPage: React.FC = () => {
             <p className={Styles.label}>სტატუსი</p>
           </div>
           <StatusDropdown
-            status={task.status}
-            onChange={(status) => console.log(status)}
+            title="Task Status"
+            defaultStatus={task.status}
+            onChange={handleStatusChange} // Use the new handler
           />
         </div>
 
@@ -88,8 +103,8 @@ const TaskPage: React.FC = () => {
             </div>
             <div className={Styles.employeeInfo}>
               <img
-                src={task.employee.avatar}
-                alt={task.employee.name}
+                src={task.employee.avatar || "/asserts/avatar.svg"}
+                alt={`${task.employee.name} ${task.employee.surname}`}
                 className={Styles.avatar}
               />
               <p>
@@ -102,7 +117,7 @@ const TaskPage: React.FC = () => {
         <div className={Styles.detailItem}>
           <img
             src="/asserts/calendar.svg"
-            alt="დაწესებული ვადა"
+            alt="დავალების ვადა"
             className={Styles.icon}
           />
           <div>
@@ -117,8 +132,7 @@ const TaskPage: React.FC = () => {
           </p>
         </div>
       </div>
-      {/* Kommentari */}
-      <Comment taskId={id as string} /> {/* passing the taskId */}
+      <Comment taskId={id as string} />
     </div>
   );
 };

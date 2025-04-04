@@ -5,13 +5,20 @@ import StatusDropdownItem from "./StatusDropdownItem";
 
 interface StatusDropdownProps {
   title: string;
-  onChange?: (status: StatusData | null) => void; // Add onChange prop
+  onChange?: (status: StatusData | null) => void;
+  defaultStatus?: StatusData | null;
 }
 
-const StatusDropdown = ({ title, onChange }: StatusDropdownProps) => {
+const StatusDropdown = ({
+  title,
+  onChange,
+  defaultStatus,
+}: StatusDropdownProps) => {
   const [statuses, setStatuses] = useState<StatusData[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState<StatusData | null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<StatusData | null>(
+    defaultStatus || null
+  );
 
   const toggleDropdown = async () => {
     if (!isOpen && statuses.length === 0) {
@@ -23,26 +30,24 @@ const StatusDropdown = ({ title, onChange }: StatusDropdownProps) => {
 
   const handleStatusSelect = (status: StatusData) => {
     setSelectedStatus(status);
-    setIsOpen(false); // Close dropdown after selection
+    setIsOpen(false);
     if (onChange) {
-      onChange(status); // Call the onChange event when a status is selected
+      onChange(status);
     }
   };
 
   useEffect(() => {
-    // Initially load the statuses
     const loadStatuses = async () => {
       const data = await fetchStatuses();
       setStatuses(data);
     };
-
     loadStatuses();
   }, []);
 
   return (
     <div className={styles.dropdownContainer}>
       <div className={styles.dropdownHeader} onClick={toggleDropdown}>
-        <span>{selectedStatus ? selectedStatus.name : "აირჩიე სტატუსი"}</span>
+        <span>{selectedStatus?.name || ""}</span>
         <span className={`${styles.arrow} ${isOpen ? styles.open : ""}`}>
           <img src="/asserts/Shape.svg" alt="Dropdown arrow" />
         </span>
