@@ -30,48 +30,43 @@ const AddTask = () => {
     e.preventDefault();
 
     if (!taskName || !departmentId || !status || !priority) {
-      setErrorMessage("ყველა სავალდებულო ველი უნდა შეავსოთ!");
-      return;
-    }
-
-    if (taskDescription && (taskDescription.length < 2 || taskDescription.length > 255)) {
-      setErrorMessage("აღწერა უნდა იყოს 2-დან 255 სიმბოლომდე!");
+      setErrorMessage("All fields are required!");
       return;
     }
 
     setIsSubmitting(true);
-    setErrorMessage(null);
-    setSuccessMessage(null);
 
-    const payload = {
-      title: taskName,
-      description: taskDescription,
-      department_id: Number(departmentId),
-      status,
-      priority,
-      due_date: dueDate || null,
-      assignee_id: selectedEmployee?.id || null,
-    };
+    const formData = new FormData();
+    formData.append("title", taskName);
+    formData.append("description", taskDescription);
+    formData.append("department_id", departmentId);
+    formData.append("status", status);
+    formData.append("priority", priority);
+    formData.append("due_date", dueDate || "");
+    if (selectedEmployee) {
+      formData.append("assignee_id", selectedEmployee.id.toString());
+    }
 
     try {
       const response = await fetch(`${API_URL}/tasks`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${TOKEN}`,
-          "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`დავალება ვერ დაემატა: ${errorText}`);
+        const responseText = await response.text();
+        throw new Error(`HTTP error! status: ${response.status}, ${responseText}`);
       }
 
-      setSuccessMessage("დავალება წარმატებით დაემატა!");
+      setSuccessMessage("Task added successfully!");
+      setErrorMessage(null);
+
       setTimeout(() => {
         setSuccessMessage(null);
-        // optional: redirect ან ფორმის დახურვა
+        // optional: close form or redirect
       }, 2000);
 
       // Reset form
@@ -83,8 +78,13 @@ const AddTask = () => {
       setDueDate("");
       setSelectedEmployee(null);
 
-    } catch (error: any) {
-      setErrorMessage(error.message || "უცნობი შეცდომა");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setErrorMessage(`Failed to add task: ${error.message}`);
+      } else {
+        setErrorMessage("An unknown error occurred");
+      }
+      setSuccessMessage(null);
     } finally {
       setIsSubmitting(false);
     }
@@ -92,54 +92,58 @@ const AddTask = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.heading}>შექმენი ახალი დავალება</h1>
+      <h1 className={styles.heading}>Create New Task</h1>
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.leftSide}>
           <div className={styles.sawyisi}>
-            <label className={styles.label}>სათაური*</label>
+            <label className={styles.label}>Task Title*</label>
             <NameInput value={taskName} onChange={(e) => setTaskName(e.target.value)} />
           </div>
           <div className={styles.inputGroup}>
-            <label className={styles.label}>აღწერა</label>
+            <label className={styles.label}>Description</label>
             <Textarea value={taskDescription} onChange={(e) => setTaskDescription(e.target.value)} />
           </div>
           <div className={styles.pr}>
             <div className={styles.priority}>
-              <label className={styles.label}>პრიორიტეტი*</label>
+              <label className={styles.label}>Priority*</label>
               <PrioritiesDropdown onPriorityChange={(id) => setPriority(String(id))} />
-              </div>
+            </div>
             <div className={styles.statues}>
-              <label className={styles.label}>სტატუსი*</label>
+              <label className={styles.label}>Status*</label>
               <StatusDropdown onStatusChange={(id) => setStatus(String(id))} />
-              </div>
+            </div>
           </div>
         </div>
 
         <div className={styles.rightSide}>
           <div className={styles.sawyisi}>
-            <label className={styles.label}>დეპარტამენტი*</label>
+            <label className={styles.label}>Department*</label>
             <DepartmentDropdown onDepartmentChange={(id) => setDepartmentId(String(id))} />
           </div>
 
           <div className={styles.RinputGroup}>
-            <label className={styles.label}>თანამშრომელი</label>
+            <label className={styles.label}>Employee</label>
             <EmployeeDropdown
-              title="აირჩიე თანამშრომელი"
+              title="Select Employee"
               onChange={(employee) => setSelectedEmployee(employee)}
               defaultEmployee={selectedEmployee}
             />
           </div>
 
           <div className={styles.RinputGroup}>
-            <label className={styles.label}>დასრულების თარიღი</label>
-            <DatePicker value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+            <label className={styles.label}>Due Date</label>
+            <DatePicker value={dueDate} onChange={setDueDate} />
           </div>
 
           {errorMessage && <div className={styles.error}>{errorMessage}</div>}
           {successMessage && <div className={styles.success}>{successMessage}</div>}
 
           <div className={styles.button}>
-            <Button3 text="დავალების დამატება" disabled={isSubmitting} />
+            <Button3 
+              text="Add Task" 
+              disabled={isSubmitting} 
+              type="submit"
+            />
           </div>
         </div>
       </form>

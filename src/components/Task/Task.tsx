@@ -85,12 +85,7 @@ const Task: React.FC<TaskProps> = ({
         }
 
         const [tasksData, prioritiesData, statusesData, departmentsData] =
-          await Promise.all([
-            tasksRes.json(),
-            prioritiesRes.json(),
-            statusesRes.json(),
-            departmentsRes.json(),
-          ]);
+          await Promise.all([tasksRes.json(), prioritiesRes.json(), statusesRes.json(), departmentsRes.json()]);
 
         setTasks(tasksData);
         setPriorities(prioritiesData);
@@ -112,7 +107,7 @@ const Task: React.FC<TaskProps> = ({
     };
 
     fetchData();
-  }, []);
+  }, []); // Empty dependency array ensures the effect runs once when the component is mounted
 
   // Fetch comment count for each task
   const fetchCommentCounts = async (tasks: TaskData[]) => {
@@ -277,8 +272,7 @@ const Task: React.FC<TaskProps> = ({
                     />
                     <div className={Styles.comments}>
                       <img src="/asserts/Comments.svg" alt="comment" />
-                      <p>{commentCounts[task.id] || 0}</p>{" "}
-                      {/* Display the comment count */}
+                      <p>{commentCounts[task.id] || 0}</p>
                     </div>
                   </div>
                 </Link>

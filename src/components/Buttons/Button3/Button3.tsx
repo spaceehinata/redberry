@@ -4,7 +4,7 @@ import styles from "./Button3.module.scss";
 
 type Button3Props = {
   text: string;
-  onClick: () => void; 
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void; // Accept the event argument
   disabled?: boolean;
 };
 
