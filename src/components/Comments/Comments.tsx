@@ -1,9 +1,12 @@
+// src/components/Comment/Comment.tsx
+
 "use client";
 
 import React, { useState } from "react";
 import styles from "./Comments.module.scss";
 import Button3 from "../Buttons/Button3/Button3";
-import { postComment } from "@/api";
+import { postComment } from "@/api/comments/postComment";
+import CommentsSection from "../CommentsSection/CommentsSection";
 
 const Comment = ({ taskId }: { taskId: string }) => {
   const [text, setText] = useState("");
@@ -18,7 +21,7 @@ const Comment = ({ taskId }: { taskId: string }) => {
         console.log("კომენტარი დაემატა:", response);
         setText("");
       } else {
-        console.error(" კომენტარის დამატება ვერ მოხერხდა");
+        console.error("კომენტარის დამატება ვერ მოხერხდა");
       }
     } catch (error) {
       console.error("Error in handleComment:", error);
@@ -26,6 +29,7 @@ const Comment = ({ taskId }: { taskId: string }) => {
   };
 
   return (
+  <div className={styles.commentColumn}> 
     <div className={styles.container}>
       <textarea
         className={styles.textarea}
@@ -37,6 +41,14 @@ const Comment = ({ taskId }: { taskId: string }) => {
         <Button3 text="დააკომენტარე" onClick={handleComment} />
       </div>
     </div>
+    <div className={styles.commentHeader}>
+      <p>კომენტარები</p>
+    </div>
+              
+    <div className={styles.commentsSection}>      
+        <CommentsSection taskId={taskId} /> 
+    </div>
+  </div>
   );
 };
 

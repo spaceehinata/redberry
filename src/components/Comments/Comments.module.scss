@@ -9,6 +9,16 @@
   flex-direction: column;
   justify-content: space-between;
 }
+.commentColumn {
+  flex: 1;
+  height: 100%;
+  background: #ddd2ff;
+  border-radius: 10px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+
+}
 
 .textarea {
   width: 100%;
@@ -29,4 +39,20 @@
 .buttonWrapper {
   display: flex;
   justify-content: flex-end;
+}
+
+// .commentsSection{
+//   margin-top: 93px;
+// }
+.commentHeader {
+  width: 100%;
+  text-align: left;
+  align-self: flex-start;
+  margin-top: 45px;
+
+  p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+  }
 }

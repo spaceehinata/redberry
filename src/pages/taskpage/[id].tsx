@@ -154,9 +154,10 @@ const TaskPage: React.FC = () => {
         {/* Right Column: Comment Section */}
         <div className={Styles.commentColumn}>
           <Comment taskId={id as string} />
-          <div className={Styles.commentHeader}>
-            <p>კომენტარები {task.commentCount || 0}</p>
-          </div>
+          {/* <div className={Styles.commentHeader}>
+            <p>კომენტარები {task.commentCount}</p>
+          </div> */}
+          
         </div>
       </div>
     </div>

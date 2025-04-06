@@ -1,0 +1,138 @@
+// src/components/CommentTree/CommentTree.module.scss
+.comment {
+    margin: 10px 0;
+    padding: 10px;
+  
+    .commentHeader {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+  
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #ddd;
+    }
+  
+    .commentContent {
+      flex: 1;
+    }
+  
+    .author {
+      font-weight: 600;
+      font-size: 14px;
+      color: #333;
+      margin: 0;
+    }
+  
+    .commentText {
+      font-size: 14px;
+      color: #555;
+      margin: 5px 0;
+      line-height: 1.5;
+    }
+  
+    .replyButton {
+      background: none;
+      border: none;
+      color: #6b48ff;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 0;
+      margin-top: 5px;
+      transition: color 0.2s ease;
+  
+      &:hover {
+        color: #5438cc;
+        text-decoration: underline;
+      }
+    }
+  
+    .replyForm {
+      margin-top: 10px;
+      margin-left: 50px;
+    }
+  
+    .error {
+      color: #ff4d4f;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+  
+    .replyTextArea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      color: #333;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s ease;
+  
+      &:focus {
+        border-color: #6b48ff;
+      }
+  
+      &:disabled {
+        background-color: #f0f0f0;
+        cursor: not-allowed;
+      }
+    }
+  
+    .replyActions {
+      margin-top: 8px;
+      display: flex;
+      gap: 10px;
+    }
+  
+    .submitButton {
+      background-color: #6b48ff;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+  
+      &:hover {
+        background-color: #5438cc;
+      }
+  
+      &:disabled {
+        background-color: #a094ff;
+        cursor: not-allowed;
+      }
+    }
+  
+    .cancelButton {
+      background-color: #e0e0e0;
+      color: #333;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+  
+      &:hover {
+        background-color: #d0d0d0;
+      }
+  
+      &:disabled {
+        background-color: #e8e8e8;
+        cursor: not-allowed;
+      }
+    }
+  
+    .subComments {
+      margin-left: 50px;
+      border-left: 2px solid #e0e0e0;
+      padding-left: 10px;
+    }
+  }
