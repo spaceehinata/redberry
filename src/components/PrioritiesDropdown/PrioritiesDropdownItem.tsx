@@ -4,13 +4,15 @@ import { Priority } from "../../api/index";
 
 interface PrioritiesDropdownItemProps {
   priority: Priority;
+  onSelect: () => void;
 }
 
 const PrioritiesDropdownItem: React.FC<PrioritiesDropdownItemProps> = ({
   priority,
+  onSelect,
 }) => {
   return (
-    <li className={styles.dropdownItem}>
+    <li className={styles.dropdownItem} onClick={onSelect}>
       <img
         src={priority.icon}
         alt={`${priority.name} icon`}
