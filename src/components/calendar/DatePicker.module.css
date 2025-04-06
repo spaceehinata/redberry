@@ -5,7 +5,10 @@
 .container {
   width: 100%;
   max-width: 318px;
+  box-sizing: border-box;
+    position: absolute;
 }
+
 
 .label {
   font-feature-settings: "dlig" on;
@@ -19,12 +22,13 @@
 }
 
 .inputContainer {
+  position: relative;
   border: 1px solid var(--purple-accent-color, #8338ec);
   color: #adb5bd;
   letter-spacing: -0.18px;
   background-color: #fff;
   border-radius: 5px;
-  width: 242px;
+  width: 100%; /* Ensure it respects the max width */
   padding: 12px 64px 12px 14px;
   font-family: FiraGO, -apple-system, Roboto, Helvetica, sans-serif;
   font-size: 14px;
@@ -35,7 +39,9 @@
   gap: 5px;
   text-align: left;
   cursor: pointer;
+  box-sizing: border-box; /* Include padding and border in the total width */
 }
+
 
 .calendarIcon {
   width: 16px;

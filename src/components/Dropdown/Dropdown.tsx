@@ -11,7 +11,13 @@ interface OptionData {
   avatar?: string;
 }
 
-const Dropdown: React.FC = () => {
+interface FilterState {
+  departments: string[];
+  priorities: string[];
+  employees: string[];
+}
+
+const Dropdown: React.FC<{ onFilterChange: (filters: FilterState) => void }> = ({ onFilterChange }) => {
   const [content, setContent] = useState<OptionData[][]>([]);
   const [visibleIndex, setVisibleIndex] = useState<number | null>(null);
   const [checkedItems, setCheckedItems] = useState<boolean[][]>([]);
@@ -31,7 +37,20 @@ const Dropdown: React.FC = () => {
   };
 
   const handleApplyFilters = () => {
-    console.log("Filters Applied");
+    if (!content.length || !checkedItems.length) {
+      console.log("No content or checked items available yet");
+      return;
+    }
+
+    const newFilters: FilterState = {
+      departments: content[0]?.filter((_, idx) => checkedItems[0]?.[idx]).map((item) => item.name) || [],
+      priorities: content[1]?.filter((_, idx) => checkedItems[1]?.[idx]).map((item) => item.name) || [],
+      employees: content[2]?.filter((_, idx) => checkedItems[2]?.[idx]).map((item) => `${item.name} ${item.surname}`) || [],
+    };
+
+    console.log("Applying filters:", newFilters);
+    onFilterChange(newFilters);
+    setVisibleIndex(null);
   };
 
   useEffect(() => {
@@ -43,7 +62,6 @@ const Dropdown: React.FC = () => {
         );
 
         console.log("Fetched data:", responses);
-        // დაამატეთ კონსოლ ლოგი, რომ იხილოთ რა მონაცემები მოდის
 
         setContent(responses);
         setCheckedItems(responses.map((group) => group.map(() => false)));

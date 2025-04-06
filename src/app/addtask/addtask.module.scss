@@ -1,57 +1,38 @@
-/* styles/AddTask.module.scss */
-
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.container{
+    max-width: 1920px;
+    margin: 0 auto;
+    margin-left: 127px;
+    margin-right: 127px;
 }
-
-.heading {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #333;
+.form{
+    background-color: #FBF9FFA6;
+    padding: 65px 55px;
+    display: flex;
+    gap: 161px;
 }
-
-.form {
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
+.label{
+    font-family: FiraGO;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color : #343A40;
 }
-
-.inputGroup {
-  margin-bottom: 15px;
+.inputGroup{
+    margin-top: 55px;
 }
-
-.label {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 5px;
+.pr{
+    margin-top: 55px;
+    display: flex;
+    gap: 32px;
 }
-
-.input {
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  width: 100%;
+.RinputGroup{
+    margin-top: 93px;
 }
-
-.submitButton {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #45a049;
-  }
+.button{
+    margin-top: 145px;
+    margin-left: 340px;
+}
+.heading{
+    margin-top: 40px;
 }

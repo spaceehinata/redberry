@@ -16,16 +16,22 @@ export const DatePicker: React.FC<DatePickerProps> = ({ onChange, value }) => {
 
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
-    onChange?.(date);
+    onChange?.(date); // Trigger onChange when date is selected
+    setIsOpen(false); // Close the calendar after selection
   };
 
   const handleCancel = () => {
-    setIsOpen(false);
+    setIsOpen(false); // Close calendar without selecting a date
   };
 
   const handleOk = () => {
-    onChange?.(selectedDate);
-    setIsOpen(false);
+    onChange?.(selectedDate); // Confirm the selected date
+    setIsOpen(false); // Close the calendar
+  };
+
+  const handleInputChange = (newDate: Date | null) => {
+    setSelectedDate(newDate);
+    onChange?.(newDate); // Trigger onChange when user manually edits the input field
   };
 
   return (
@@ -34,7 +40,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({ onChange, value }) => {
       <div className={styles.container}>
         <DatePickerInput
           value={selectedDate}
-          onClick={() => setIsOpen(!isOpen)}
+          onChange={handleInputChange} // Pass onChange to DatePickerInput
+          onClick={() => setIsOpen(!isOpen)} // Toggle calendar open/close
         />
         {isOpen && (
           <DatePickerCalendar

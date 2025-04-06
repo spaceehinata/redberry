@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./PrioritiesDropdown.module.scss";
+import styles from "./StatuesDropdown.module.scss";
 import { Priority } from "../../api/index";
 
 interface PrioritiesDropdownItemProps {

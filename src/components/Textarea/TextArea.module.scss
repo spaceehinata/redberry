@@ -1,0 +1,62 @@
+.textareaContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  
+    label {
+      font-size: 14px;
+      color: #333;
+      font-family: FiraGO; // Assuming FiraGO font is used, adjust if needed
+    }
+  }
+  
+  .textareaWrapper {
+    textarea {
+      width: 550;
+      min-height: 133px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+      font-family: FiraGO;
+      resize: vertical;
+      box-sizing: border-box;
+  
+      &:focus {
+        outline: none;
+        border-color: #6b48ff; 
+      }
+  
+      &.valid {
+        border-color: #ddd;
+      }
+  
+      &.invalid {
+        border-color: #ff4d4f; // Red color for invalid state
+      }
+    }
+  }
+  
+  .validation {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 5px;
+  }
+  
+  .validationItem {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: #666;
+  
+    img {
+      width: 16px;
+      height: 16px;
+    }
+  
+    span {
+      font-family: FiraGO;
+    }
+  }

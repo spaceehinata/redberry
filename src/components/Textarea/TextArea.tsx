@@ -1,22 +1,21 @@
 "use client";
-import React, { useState } from "react";
-import styles from "./Name.module.scss";
+import React from "react";
+import styles from "./TextArea.module.scss";
 
-interface NameInputProps {
+interface TextareaProps {
   label?: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-const NameInput: React.FC<NameInputProps> = ({ label, value, onChange }) => {
+const Textarea: React.FC<TextareaProps> = ({ label, value, onChange }) => {
   const isValid = value.length >= 2 && value.length <= 255;
 
   return (
-    <div className={styles.inputContainer}>
-      <label>{label}</label>
-      <div className={styles.inputWrapper}>
-        <input
-          type="text"
+    <div className={styles.textareaContainer}>
+      {label && <label>{label}</label>}
+      <div className={styles.textareaWrapper}>
+        <textarea
           value={value}
           onChange={onChange}
           className={isValid || value.length === 0 ? styles.valid : styles.invalid}
@@ -55,4 +54,4 @@ const NameInput: React.FC<NameInputProps> = ({ label, value, onChange }) => {
   );
 };
 
-export default NameInput;
+export default Textarea;
