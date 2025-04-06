@@ -15,6 +15,7 @@ const TaskPage: React.FC = () => {
   const [task, setTask] = useState<TaskData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [statuses, setStatuses] = useState<StatusData[]>([]);
 
   const router = useRouter();
   const { id } = router.query;
@@ -39,15 +40,34 @@ const TaskPage: React.FC = () => {
       }
     };
 
+    const fetchStatuses = async () => {
+      try {
+        const res = await fetch(`${API_URL}/statuses`, {
+          headers: { Authorization: `Bearer ${TOKEN}` },
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch statuses");
+
+        const statusesData = await res.json();
+        setStatuses(statusesData);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Unknown error");
+      }
+    };
+
     fetchTaskData();
+    fetchStatuses();
   }, [id]);
 
-  const handleStatusChange = (newStatus: StatusData | null) => {
-    if (!task || !newStatus) return;
+  const handleStatusChange = (statusId: number) => {
+    if (!task || !statusId) return;
 
-    updateTaskStatus(task, newStatus.name, setTask, (updatedTask: TaskData) => {
-      console.log("Task updated successfully:", updatedTask);
-    });
+    const updatedStatus = statuses.find((status) => status.id === statusId);
+    if (updatedStatus) {
+      updateTaskStatus(task, updatedStatus.name, setTask, (updatedTask: TaskData) => {
+        console.log("Task updated successfully:", updatedTask);
+      });
+    }
   };
 
   if (loading) return <div>Loading...</div>;
@@ -81,7 +101,7 @@ const TaskPage: React.FC = () => {
               <StatusDropdown
                 title="Task Status"
                 defaultStatus={task.status}
-                onChange={handleStatusChange}
+                onStatusChange={handleStatusChange}  // Pass the handler function
               />
             </div>
 
