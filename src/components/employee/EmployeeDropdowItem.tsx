@@ -20,7 +20,7 @@ const EmployeeDropdownItem: React.FC<EmployeeDropdownItemProps> = ({
     >
       <div className={styles.employeeItemContent}>
         <img
-          src={employee.avatar} 
+          src={employee.avatar}
           alt={`${employee.name} ${employee.surname}`}
           className={styles.avatar}
         />

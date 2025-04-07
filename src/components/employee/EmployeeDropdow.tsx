@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import styles from "./Employee.module.scss"
+import React, { useState } from "react";
+import styles from "./Employee.module.scss";
 import { fetchEmployees, EmployeeData } from "../../api/Employees";
 import EmployeeDropdownItem from "./EmployeeDropdowItem";
 
@@ -36,22 +36,38 @@ const EmployeeDropdown: React.FC<EmployeeDropdownProps> = ({
     }
   };
 
-  useEffect(() => {
-    const loadEmployees = async () => {
-      const data = await fetchEmployees();
-      setEmployees(data);
-    };
-    loadEmployees();
-  }, []);
-
   return (
     <div className={styles.dropdownContainer}>
       <div className={styles.dropdownHeader} onClick={toggleDropdown}>
-        <span>{selectedEmployee?.name || title}</span>
+        {selectedEmployee ? (
+          // <div className={styles.employeeItemContent}>
+          //   <img
+          //     src={selectedEmployee.avatar}
+          //     alt={`${selectedEmployee.name} ${selectedEmployee.surname}`}
+          //     className={styles.avatar}
+          //   />
+          //   <span className={styles.employeeName}>
+          //     {selectedEmployee.name} {selectedEmployee.surname}
+          //   </span>
+          // </div>
+          <div className={styles.employeeContainer}>
+            <img
+              src={selectedEmployee.avatar}
+              alt={`${selectedEmployee.name} ${selectedEmployee.surname}`}
+              className={styles.avatar}
+            />
+            <span className={styles.employeeName}>
+              {selectedEmployee.name} {selectedEmployee.surname}
+            </span>
+          </div>
+        ) : (
+          <span className={styles.placeholder}>{title}</span>
+        )}
         <span className={`${styles.arrow} ${isOpen ? styles.open : ""}`}>
           <img src="/asserts/Shape.svg" alt="Dropdown arrow" />
         </span>
       </div>
+
       {isOpen && (
         <ul className={styles.dropdownList}>
           {employees.map((employee) => (
