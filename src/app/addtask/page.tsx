@@ -20,8 +20,10 @@ const AddTask = () => {
   const [departmentId, setDepartmentId] = useState<string>("");
   const [status, setStatus] = useState("");
   const [priority, setPriority] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [selectedEmployee, setSelectedEmployee] = useState<EmployeeData | null>(null);
+  const [dueDate, setDueDate] = useState(""); // expected to be string like "2025-12-31"
+  const [selectedEmployee, setSelectedEmployee] = useState<EmployeeData | null>(
+    null
+  );
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,7 +36,10 @@ const AddTask = () => {
       return;
     }
 
-    if (taskDescription && (taskDescription.length < 2 || taskDescription.length > 255)) {
+    if (
+      taskDescription &&
+      (taskDescription.length < 2 || taskDescription.length > 255)
+    ) {
       setErrorMessage("აღწერა უნდა იყოს 2-დან 255 სიმბოლომდე!");
       return;
     }
@@ -43,24 +48,27 @@ const AddTask = () => {
     setErrorMessage(null);
     setSuccessMessage(null);
 
+    // ✅ format dueDate to RFC 3339
+    const formattedDueDate = dueDate ? new Date(dueDate).toISOString() : null;
+
     const payload = {
-      title: taskName,
+      name: taskName,
       description: taskDescription,
       department_id: Number(departmentId),
-      status,
-      priority,
-      due_date: dueDate || null,
-      assignee_id: selectedEmployee?.id || null,
+      status_id: parseInt(status),
+      priority_id: parseInt(priority),
+      due_date: formattedDueDate,
+      employee_id: selectedEmployee?.id || null,
     };
 
     try {
       const response = await fetch(`${API_URL}/tasks`, {
-        method: "POST",  // მეთოდი არის POST
+        method: "POST",
         headers: {
           Authorization: `Bearer ${TOKEN}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload), // JSON-ად გიგზავნით მონაცემებს
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -82,7 +90,6 @@ const AddTask = () => {
       setPriority("");
       setDueDate("");
       setSelectedEmployee(null);
-
     } catch (error: any) {
       setErrorMessage(error.message || "უცნობი შეცდომა");
     } finally {
@@ -97,20 +104,31 @@ const AddTask = () => {
         <div className={styles.leftSide}>
           <div className={styles.sawyisi}>
             <label className={styles.label}>სათაური*</label>
-            <NameInput value={taskName} onChange={(e) => setTaskName(e.target.value)} />
+            <NameInput
+              value={taskName}
+              onChange={(e) => setTaskName(e.target.value)}
+            />
           </div>
           <div className={styles.inputGroup}>
             <label className={styles.label}>აღწერა</label>
-            <Textarea value={taskDescription} onChange={(e) => setTaskDescription(e.target.value)} />
+            <Textarea
+              value={taskDescription}
+              onChange={(e) => setTaskDescription(e.target.value)}
+            />
           </div>
           <div className={styles.pr}>
             <div className={styles.priority}>
               <label className={styles.label}>პრიორიტეტი*</label>
-              <PrioritiesDropdown onPriorityChange={(id) => setPriority(String(id))} />
+              <PrioritiesDropdown
+                onPriorityChange={(id) => setPriority(String(id))}
+              />
             </div>
             <div className={styles.statues}>
               <label className={styles.label}>სტატუსი*</label>
-              <StatusDropdown onStatusChange={(id) => setStatus(String(id))} />
+              <StatusDropdown
+                onStatusChange={(id) => setStatus(String(id))}
+                title="აირჩიე სტატუსი"
+              />
             </div>
           </div>
         </div>
@@ -118,7 +136,9 @@ const AddTask = () => {
         <div className={styles.rightSide}>
           <div className={styles.sawyisi}>
             <label className={styles.label}>დეპარტამენტი*</label>
-            <DepartmentDropdown onDepartmentChange={(id) => setDepartmentId(String(id))} />
+            <DepartmentDropdown
+              onDepartmentChange={(id) => setDepartmentId(String(id))}
+            />
           </div>
 
           <div className={styles.RinputGroup}>
@@ -136,13 +156,15 @@ const AddTask = () => {
           </div>
 
           {errorMessage && <div className={styles.error}>{errorMessage}</div>}
-          {successMessage && <div className={styles.success}>{successMessage}</div>}
+          {successMessage && (
+            <div className={styles.success}>{successMessage}</div>
+          )}
 
           <div className={styles.button}>
-            <Button3 
-              text="დავალების დამატება" 
-              disabled={isSubmitting} 
-              type="submit"  // type="submit" აქ
+            <Button3
+              text="დავალების დამატება"
+              disabled={isSubmitting}
+              type="submit"
             />
           </div>
         </div>

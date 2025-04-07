@@ -4,7 +4,7 @@ import { StatusData } from "@/types";
 
 interface StatusDropdownProps {
   onStatusChange: (statusId: number) => void;
-  defaultStatus: StatusData;
+  defaultStatus?: StatusData; // Now optional
   title: string;
 }
 
@@ -14,7 +14,9 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
   title,
 }) => {
   const [statuses, setStatuses] = useState<StatusData[]>([]);
-  const [selectedStatus, setSelectedStatus] = useState<string>(defaultStatus.name);
+  const [selectedStatus, setSelectedStatus] = useState<string>(
+    defaultStatus?.name || ""
+  );
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const toggleDropdown = async () => {
@@ -28,9 +30,14 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
 
   const fetchStatuses = async () => {
     try {
-      const res = await fetch("https://momentum.redberryinternship.ge/api/statuses", {
-        headers: { Authorization: `Bearer 9e85a2d7-4757-4769-9e4e-f7d01e4f8d08` },
-      });
+      const res = await fetch(
+        "https://momentum.redberryinternship.ge/api/statuses",
+        {
+          headers: {
+            Authorization: `Bearer 9e85a2d7-4757-4769-9e4e-f7d01e4f8d08`,
+          },
+        }
+      );
 
       if (res.ok) {
         const data = await res.json();
@@ -45,7 +52,7 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
 
   const handleSelect = (status: StatusData) => {
     setSelectedStatus(status.name);
-    onStatusChange(status.id);  // Pass the status ID to the parent
+    onStatusChange(status.id); // Pass the status ID to the parent
     setIsOpen(false);
   };
 
@@ -64,7 +71,7 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
               <li
                 key={status.id}
                 className={Styles.dropdownItem}
-                onClick={() => handleSelect(status)}  // Pass status object to handleSelect
+                onClick={() => handleSelect(status)}
               >
                 {status.name}
               </li>

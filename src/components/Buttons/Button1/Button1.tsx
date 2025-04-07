@@ -1,10 +1,9 @@
-// Button1.tsx
 import React from "react";
 import styles from "./Button1.module.scss";
 
 interface ButtonProps {
   text: string;
-  onClick?: () => void; // optional, მაგრამ მაინც გამოვიძახებთ მხოლოდ თუ არის
+  onClick?: () => void;
 }
 
 const Button1: React.FC<ButtonProps> = ({ text, onClick }) => {
