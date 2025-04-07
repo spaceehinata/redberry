@@ -1,48 +1,78 @@
+// src/components/CommentTree/CommentTree.tsx
+
+"use client";
+
 import React, { useState } from "react";
 import { CommentType } from "@/types";
+import Button4 from "@/components/Buttons/Button4/Button4";
 import styles from "./CommentTree.module.scss";
+import Button1 from "@/components/Buttons/Button1/Button1";
+
+const API_TOKEN = "9e85a2d7-4757-4769-9e4e-f7d01e4f8d08";
 
 const CommentTree = ({ comment }: { comment: CommentType }) => {
-  const [isReplying, setIsReplying] = useState(false); // State to toggle reply text area
-  const [replyText, setReplyText] = useState(""); // State to store the reply text
+  const [isReplying, setIsReplying] = useState(false); // Toggle for reply textarea
+  const [replyText, setReplyText] = useState(""); // Store the reply text
+  const [subComments, setSubComments] = useState(comment.sub_comments || []); // Store the sub-comments (replies)
 
-  const handleReplyClick = () => {
-    setIsReplying(true); // Show the reply text area
+  // Toggle the visibility of the reply textarea
+  const toggleReplyTextarea = () => {
+    setIsReplying(!isReplying);
   };
 
-  const handleCancelReply = () => {
-    setIsReplying(false); // Hide the reply text area
-    setReplyText(""); // Clear the text area
-  };
-
-  const handleSubmitReply = () => {
-    if (replyText.trim()) {
-      // Placeholder for submitting the reply
-      console.log(`Submitting reply to comment ID: ${comment.id}`, replyText);
-      // You can add logic here to send the reply to a backend or update the comment tree
-      setIsReplying(false); // Hide the text area after submission
-      setReplyText(""); // Clear the text area
-    }
-  };
-
+  // Handle the reply text change as user types
   const handleReplyTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setReplyText(e.target.value); // Update the reply text as the user types
+    setReplyText(e.target.value);
+  };
+
+  // Submit a new reply to the comment
+  const handleSubmitReply = async () => {
+    if (!replyText.trim()) return;
+
+    try {
+      const response = await fetch(
+        `https://momentum.redberryinternship.ge/api/tasks/${comment.task_id}/comments`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${API_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text: replyText,
+            parent_id: comment.id, // Mark it as a reply to this comment
+          }),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to post sub-comment");
+
+      const newReply = await response.json(); // Get the new reply from the response
+      setSubComments((prev) => [...prev, newReply]); // Add new reply to the sub-comments list
+      setReplyText(""); // Clear the textarea
+      setIsReplying(false); // Hide the reply textarea after submission
+    } catch (error) {
+      console.error("Error posting reply:", error);
+    }
   };
 
   return (
     <div className={styles.comment}>
       <div className={styles.commentHeader}>
         <img
-          src={comment.author_avatar}
-          alt="Author"
           className={styles.avatar}
+          src={comment.author_avatar}
+          alt={comment.author_nickname}
         />
         <div className={styles.commentContent}>
           <p className={styles.author}>{comment.author_nickname}</p>
           <p className={styles.commentText}>{comment.text}</p>
-          <button className={styles.replyButton} onClick={handleReplyClick}>
-            Reply
-          </button>
+
+          {/* Reply Button */}
+          <Button4
+            text={isReplying ? "Cancel" : "Reply"}
+            onClick={toggleReplyTextarea}
+          />
         </div>
       </div>
 
@@ -51,26 +81,34 @@ const CommentTree = ({ comment }: { comment: CommentType }) => {
         <div className={styles.replyForm}>
           <textarea
             className={styles.replyTextArea}
+            placeholder="Write your reply..."
             value={replyText}
             onChange={handleReplyTextChange}
-            placeholder="Write your reply..."
             rows={3}
           />
           <div className={styles.replyActions}>
-            <button className={styles.submitButton} onClick={handleSubmitReply}>
-              Submit
-            </button>
-            <button className={styles.cancelButton} onClick={handleCancelReply}>
-              Cancel
-            </button>
+            <Button1 text="Submit" onClick={handleSubmitReply} />
           </div>
         </div>
       )}
 
-      {comment.sub_comments?.length > 0 && (
+      {/* Display Sub-comments (Replies) */}
+      {subComments.length > 0 && (
         <div className={styles.subComments}>
-          {comment.sub_comments.map((subComment) => (
-            <CommentTree key={subComment.id} comment={subComment} />
+          {subComments.map((subComment) => (
+            <div key={subComment.id} className={styles.subComment}>
+              <div className={styles.subCommentHeader}>
+                <img
+                  className={styles.avatar}
+                  src={subComment.author_avatar}
+                  alt={subComment.author_nickname}
+                />
+                <div className={styles.commentContent}>
+                  <p className={styles.author}>{subComment.author_nickname}</p>
+                  <p className={styles.commentText}>{subComment.text}</p>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       )}

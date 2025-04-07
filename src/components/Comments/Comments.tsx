@@ -29,26 +29,26 @@ const Comment = ({ taskId }: { taskId: string }) => {
   };
 
   return (
-  <div className={styles.commentColumn}> 
-    <div className={styles.container}>
-      <textarea
-        className={styles.textarea}
-        placeholder="დააკომენტარე"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
-      <div className={styles.buttonWrapper}>
-        <Button3 text="დააკომენტარე" onClick={handleComment} />
+    <div className={styles.commentColumn}>
+      <div className={styles.container}>
+        <textarea
+          className={styles.textarea}
+          placeholder="დააკომენტარე"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+        <div className={styles.buttonWrapper}>
+          <Button3 text="დააკომენტარე" onClick={handleComment} />
+        </div>
+      </div>
+      <div className={styles.commentHeader}>
+        <p>კომენტარები</p>
+      </div>
+
+      <div className={styles.commentsSection}>
+        <CommentsSection taskId={taskId} />
       </div>
     </div>
-    <div className={styles.commentHeader}>
-      <p>კომენტარები</p>
-    </div>
-              
-    <div className={styles.commentsSection}>      
-        <CommentsSection taskId={taskId} /> 
-    </div>
-  </div>
   );
 };
 

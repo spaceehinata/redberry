@@ -1,14 +1,19 @@
-import React from 'react'
-import styles from './Button4.module.scss'
-type Props = {}
+import React from "react";
+import styles from "./Button4.module.scss";
 
-const Button4 = (props: Props) => {
-    return (
-      <div className={styles.button}>
-        <img src="/asserts/Left 2.svg" alt="arrow" />
-        უპასუხე
-      </div>
-    );
-  };
+type Props = {
+  onClick: () => void; // Accept the onClick handler as a prop
+};
 
-export default Button4
+const Button4 = ({ onClick }: Props) => {
+  return (
+    <div className={styles.button} onClick={onClick}>
+      {" "}
+      {/* Call the onClick handler when clicked */}
+      <img src="/asserts/Left 2.svg" alt="arrow" />
+      უპასუხე
+    </div>
+  );
+};
+
+export default Button4;

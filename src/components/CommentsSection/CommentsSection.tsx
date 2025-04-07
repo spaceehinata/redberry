@@ -8,6 +8,7 @@ import CommentTree from "../CommentTree/CommentTree";
 import { CommentType } from "@/types";
 
 const CommentsSection = ({ taskId }: { taskId: string }) => {
+  // taskId as string
   const [comments, setComments] = useState<CommentType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -15,7 +16,7 @@ const CommentsSection = ({ taskId }: { taskId: string }) => {
   const fetchComments = async () => {
     try {
       setLoading(true);
-      const response = await getComments(Number(taskId)); // გადაყვანა number-ში
+      const response = await getComments(taskId); // taskId as string
       if (response) {
         setComments(response);
       } else {
@@ -43,7 +44,9 @@ const CommentsSection = ({ taskId }: { taskId: string }) => {
   return (
     <div>
       {comments.length > 0 ? (
-        comments.map((comment) => <CommentTree key={comment.id} comment={comment} />)
+        comments.map((comment) => (
+          <CommentTree key={comment.id} comment={comment} />
+        ))
       ) : (
         <p>No comments yet</p>
       )}
