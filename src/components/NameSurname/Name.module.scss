@@ -1,11 +1,3 @@
-// .formContainer {
-//     display: flex;
-//     flex-direction: column;
-//     gap: 10px;
-//     max-width: 400px;
-//     padding: 20px;
-//   }
-
 .inputContainer {
   display: flex;
   flex-direction: column;
@@ -15,7 +7,6 @@
     font-weight: 500;
     font-size: 14px;
     line-height: 100%;
-    letter-spacing: 0%;
     margin-bottom: 8px;
   }
 }
@@ -30,9 +21,10 @@
     width: 378px;
     height: 42px;
     border-radius: 6px;
-    border: 1px solid #ccc;
+    border: 1px solid #ccc; // default ნაცრისფერი
     outline: none;
     transition: 0.3s;
+    padding: 0 10px;
   }
 
   .valid {
@@ -41,13 +33,6 @@
 
   .invalid {
     border-color: red;
-  }
-
-  .infoIcon {
-    position: absolute;
-    right: 10px;
-    width: 20px;
-    height: 20px;
   }
 }
 

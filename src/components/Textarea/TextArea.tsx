@@ -1,54 +1,34 @@
-"use client";
 import React from "react";
+import { ErrorMessage } from "formik";
 import styles from "./TextArea.module.scss";
 
-interface TextareaProps {
-  label?: string;
+type Props = {
+  name: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-}
+  label?: string;
+};
 
-const Textarea: React.FC<TextareaProps> = ({ label, value, onChange }) => {
-  const isValid = value.length >= 2 && value.length <= 255;
-
+const Textarea: React.FC<Props> = ({ name, value, onChange, label }) => {
   return (
-    <div className={styles.textareaContainer}>
-      {label && <label>{label}</label>}
-      <div className={styles.textareaWrapper}>
-        <textarea
-          value={value}
-          onChange={onChange}
-          className={isValid || value.length === 0 ? styles.valid : styles.invalid}
-          required
-        />
-      </div>
+    <div className={styles.textareaWrapper}>
+      {label && <label htmlFor={name}>{label}</label>}
+      <textarea
+        name={name}
+        value={value}
+        onChange={onChange}
+        className={styles.textarea}
+      />
       <div className={styles.validation}>
-        <div className={styles.validationItem}>
-          <img
-            src={
-              value.length === 0
-                ? "/asserts/checkGr.svg"
-                : value.length >= 2
-                ? "/asserts/check.svg"
-                : "/asserts/checkRed.svg"
+        <ErrorMessage name={name}>
+          {(msg) => {
+            // Check if msg is an object, then return its string representation
+            if (typeof msg === "object") {
+              return <span className={styles.errorMessage}>Error: {JSON.stringify(msg)}</span>;
             }
-            alt="status"
-          />
-          <span>მინიმუმ 2 სიმბოლო</span>
-        </div>
-        <div className={styles.validationItem}>
-          <img
-            src={
-              value.length === 0
-                ? "/asserts/checkGr.svg"
-                : value.length <= 255
-                ? "/asserts/check.svg"
-                : "/asserts/checkRed.svg"
-            }
-            alt="status"
-          />
-          <span>მაქსიმუმ 255 სიმბოლო</span>
-        </div>
+            return <span className={styles.errorMessage}>{msg}</span>;
+          }}
+        </ErrorMessage>
       </div>
     </div>
   );

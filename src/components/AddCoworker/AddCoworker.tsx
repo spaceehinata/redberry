@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./AddCoworker.module.scss";
 import ProfilePhotoUploader from "../PhotoUpload/PhotoUpload";
 import Button2 from "../Buttons/Button2/Button2";
-import NameInput from "../NameSurname/Name";
+import NameInput from "../NameSurname/NameInput";
 import Button3 from "../Buttons/Button3/Button3";
 import DepartmentDropdown from "../DepartmentDropDown/DepartmentDropdown";
 
@@ -49,7 +49,9 @@ const AddCoworker: React.FC<AddCoworkerProps> = ({ onClose }) => {
 
       if (!response.ok) {
         const responseText = await response.text();
-        throw new Error(`HTTP error! status: ${response.status}, ${responseText}`);
+        throw new Error(
+          `HTTP error! status: ${response.status}, ${responseText}`
+        );
       }
 
       const result = await response.json();
@@ -60,7 +62,6 @@ const AddCoworker: React.FC<AddCoworkerProps> = ({ onClose }) => {
         setSuccessMessage(null);
         onClose();
       }, 2000);
-
     } catch (error: unknown) {
       if (error instanceof Error) {
         setErrorMessage(`Failed to add employee: ${error.message}`);
@@ -103,18 +104,30 @@ const AddCoworker: React.FC<AddCoworkerProps> = ({ onClose }) => {
           </div>
           <div className={styles.formGroup}>
             <div className={styles.dropdownContainer}>
-              <DepartmentDropdown onDepartmentChange={(id) => setDepartmentId(id)} />
+              <DepartmentDropdown
+                onDepartmentChange={(id) => setDepartmentId(id)}
+              />
             </div>
           </div>
           {errorMessage && <div className={styles.error}>{errorMessage}</div>}
-          {successMessage && <div className={styles.success}>{successMessage}</div>}
+          {successMessage && (
+            <div className={styles.success}>{successMessage}</div>
+          )}
           <div className={styles.buttonGroup}>
             <Button2 onClick={onClose}>გაუქმება</Button2>
             {/* Modify onClick here to avoid type error */}
             <Button3
               text="თანამშრომლის დამატება"
-              disabled={!firstName || !lastName || !departmentId || !photo || isSubmitting}
-              onClick={() => handleSubmit({} as React.FormEvent<HTMLFormElement>)} // Fix to prevent type error
+              disabled={
+                !firstName ||
+                !lastName ||
+                !departmentId ||
+                !photo ||
+                isSubmitting
+              }
+              onClick={() =>
+                handleSubmit({} as React.FormEvent<HTMLFormElement>)
+              } // Fix to prevent type error
             />
           </div>
         </form>

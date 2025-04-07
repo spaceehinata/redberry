@@ -26,35 +26,35 @@ const Square = ({ priority, size, icon, label }: Props) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchPriorities = async () => {
-      try {
-        const response = await fetch(`${API_URL}/priorities`, {
-          headers: { Authorization: `Bearer ${TOKEN}` },
-        });
+  // useEffect(() => {
+  //   const fetchPriorities = async () => {
+  //     try {
+  //       const response = await fetch(`${API_URL}/priorities`, {
+  //         headers: { Authorization: `Bearer ${TOKEN}` },
+  //       });
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch priorities");
-        }
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch priorities");
+  //       }
 
-        const prioritiesData = await response.json();
-        setPriorities(prioritiesData);
-        console.log("Priorities fetched:", prioritiesData);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       const prioritiesData = await response.json();
+  //       setPriorities(prioritiesData);
+  //       console.log("Priorities fetched:", prioritiesData);
+  //     } catch (err) {
+  //       setError(err.message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchPriorities();
-  }, []);
+  //   fetchPriorities();
+  // }, []);
 
   const getPriorityDetails = (priorityName: string) => {
-    const priorityData = priorities.find((p) => p.name === priorityName);
-    if (!priorityData) {
-      return { icon: "/asserts/Medium.svg", label: "Medium", color: "yellow" }; 
-    }
+    // const priorityData = priorities.find((p) => p.name === priorityName);
+    // if (!priorityData) {
+    //   return { icon: "/asserts/Medium.svg", label: "Medium", color: "yellow" }; 
+    // }
 
     switch (priorityName) {
       case "მაღალი":
@@ -76,8 +76,8 @@ const Square = ({ priority, size, icon, label }: Props) => {
     }
   };
 
-  if (loading) return <div>Loading priority...</div>;
-  if (error) return <div>Error: {error}</div>;
+  // if (loading) return <div>Loading priority...</div>;
+  // if (error) return <div>Error: {error}</div>;
 
   const {
     icon: priorityIcon,

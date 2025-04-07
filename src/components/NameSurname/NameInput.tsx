@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import styles from "./Name.module.scss";
 
 interface NameInputProps {
@@ -19,7 +19,9 @@ const NameInput: React.FC<NameInputProps> = ({ label, value, onChange }) => {
           type="text"
           value={value}
           onChange={onChange}
-          className={isValid || value.length === 0 ? styles.valid : styles.invalid}
+          className={
+            value.length === 0 ? "" : isValid ? styles.valid : styles.invalid
+          }
           required
         />
       </div>

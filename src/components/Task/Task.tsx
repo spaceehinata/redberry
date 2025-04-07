@@ -19,7 +19,7 @@ interface TaskData {
   employee: { name: string; surname: string; avatar?: string };
   department: { name: string };
   status: { id: number; name: string };
-  commentCount?: number; // Optional comment count field
+  total_comments?: number; // ✅ comes from backend
 }
 
 interface DepartmentData {
@@ -51,9 +51,6 @@ const Task: React.FC<TaskProps> = ({
   const [departments, setDepartments] = useState<DepartmentData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [commentCounts, setCommentCounts] = useState<{
-    [taskId: number]: number;
-  }>({}); // Store comment counts by task ID
 
   // Fetch tasks, statuses, priorities, and departments
   useEffect(() => {
@@ -96,10 +93,6 @@ const Task: React.FC<TaskProps> = ({
         setPriorities(prioritiesData);
         setStatuses(statusesData);
         setDepartments(departmentsData);
-
-        // Fetch comment count for each task
-        const commentCounts = await fetchCommentCounts(tasksData);
-        setCommentCounts(commentCounts);
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);
@@ -113,66 +106,6 @@ const Task: React.FC<TaskProps> = ({
 
     fetchData();
   }, []);
-
-  // Fetch comment count for each task
-  const fetchCommentCounts = async (tasks: TaskData[]) => {
-    const counts: { [taskId: number]: number } = {};
-    for (const task of tasks) {
-      try {
-        const res = await fetch(`${API_URL}/tasks/${task.id}/comments`, {
-          headers: { Authorization: `Bearer ${TOKEN}` },
-        });
-        if (res.ok) {
-          const comments = await res.json();
-          counts[task.id] = comments.length;
-        } else {
-          counts[task.id] = 0; // No comments if request fails
-        }
-      } catch (err) {
-        counts[task.id] = 0; // Default to 0 if an error occurs
-      }
-    }
-    return counts;
-  };
-
-  const getPriorityColor = (priorityName: string) => {
-    switch (priorityName.toLowerCase()) {
-      case "high":
-      case "მაღალი":
-        return "pink";
-      case "medium":
-      case "საშუალო":
-        return "yellow";
-      case "low":
-      case "დაბალი":
-        return "blue";
-      default:
-        return "red";
-    }
-  };
-
-  const getDepartmentColor = (departmentName: string) => {
-    switch (departmentName) {
-      case "ადმინისტრაციის დეპარტამენტი":
-        return "purple";
-      case "ადამიანური რესურსების დეპარტამენტი":
-        return "green";
-      case "ფინანსების დეპარტამენტი":
-        return "blue";
-      case "გაყიდვები და მარკეტინგის დეპარტამენტი":
-        return "orange";
-      case "ლოჯოსტიკის დეპარტამენტი":
-        return "teal";
-      case "ტექნოლოგიების დეპარტამენტი":
-        return "yellow";
-      case "მედიის დეპარტამენტი":
-        return "pink";
-      case "დიზაინერების დეპარტამენტი":
-        return "red";
-      default:
-        return "gray";
-    }
-  };
 
   const getStatusColor = (statusName: string): TaskColor => {
     switch (statusName) {
@@ -193,22 +126,10 @@ const Task: React.FC<TaskProps> = ({
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const monthNames = [
-      "იანვ",
-      "თებ",
-      "მარ",
-      "აპრ",
-      "მაი",
-      "ივნ",
-      "ივლ",
-      "აგვ",
-      "სექ",
-      "ოქტ",
-      "ნოე",
-      "დეკ",
+      "იანვ", "თებ", "მარ", "აპრ", "მაი", "ივნ",
+      "ივლ", "აგვ", "სექ", "ოქტ", "ნოე", "დეკ"
     ];
-    return `${date.getDate()} ${
-      monthNames[date.getMonth()]
-    }, ${date.getFullYear()}`;
+    return `${date.getDate()} ${monthNames[date.getMonth()]}, ${date.getFullYear()}`;
   };
 
   const filteredTasks =
@@ -277,8 +198,7 @@ const Task: React.FC<TaskProps> = ({
                     />
                     <div className={Styles.comments}>
                       <img src="/asserts/Comments.svg" alt="comment" />
-                      <p>{commentCounts[task.id] || 0}</p>{" "}
-                      {/* Display the comment count */}
+                      <p>{task.total_comments ?? 0}</p> {/* ✅ comment count from backend */}
                     </div>
                   </div>
                 </Link>
