@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Styles from "./TaskPage.module.scss";
-import { TaskData, StatusData } from "@/types";
+import { TaskData, StatusData, CommentType } from "@/types";
 import Round from "@/components/Tag/Round/Round";
 import Square from "@/components/Tag/Square/Square";
 import StatusDropdown from "@/components/StatusDropdown/StatusDropdown";
 import Comment from "@/components/Comments/Comments";
 import { updateTaskStatus } from "@/api/updateTaskStatus";
-import Header from "@/components/Header/Header";
+// import Header from "@/components/Header/Header";
 
 const API_URL = "https://momentum.redberryinternship.ge/api";
 const TOKEN = "9e85a2d7-4757-4769-9e4e-f7d01e4f8d08";
@@ -17,6 +17,7 @@ const TaskPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [statuses, setStatuses] = useState<StatusData[]>([]);
+  const [comments, setComments] = useState<CommentType[]>([]);
 
   const router = useRouter();
   const { id } = router.query;
@@ -56,8 +57,24 @@ const TaskPage: React.FC = () => {
       }
     };
 
+    const fetchComments = async () => {
+      try {
+        const res = await fetch(`${API_URL}/tasks/${id}/comments`, {
+          headers: { Authorization: `Bearer ${TOKEN}` },
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch comments");
+
+        const commentsData = await res.json();
+        setComments(commentsData);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     fetchTaskData();
     fetchStatuses();
+    fetchComments();
   }, [id]);
 
   const handleStatusChange = (statusId: number) => {
@@ -82,7 +99,7 @@ const TaskPage: React.FC = () => {
 
   return (
     <div>
-      <Header></Header>
+      {/* <Header /> */}
       <div className={Styles.container}>
         <div className={Styles.twoColumnLayout}>
           {/* Left Column: Task Details */}
@@ -97,6 +114,7 @@ const TaskPage: React.FC = () => {
             </div>
             <div className={Styles.details}>
               <span>დავალების დეტალები</span>
+
               <div className={Styles.detailItem}>
                 <img
                   src="/asserts/icon1.svg"
@@ -109,7 +127,7 @@ const TaskPage: React.FC = () => {
                 <StatusDropdown
                   title="Task Status"
                   defaultStatus={task.status}
-                  onStatusChange={handleStatusChange} // Pass the handler function
+                  onStatusChange={handleStatusChange}
                 />
               </div>
 
@@ -161,10 +179,7 @@ const TaskPage: React.FC = () => {
 
           {/* Right Column: Comment Section */}
           <div className={Styles.commentColumn}>
-            <Comment taskId={id as string} />
-            {/* <div className={Styles.commentHeader}>
-            <p>კომენტარები {task.commentCount}</p>
-          </div> */}
+            <Comment taskId={id as string} initialComments={comments} />
           </div>
         </div>
       </div>

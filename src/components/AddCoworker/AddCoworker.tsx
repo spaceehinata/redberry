@@ -22,8 +22,8 @@ const AddCoworker: React.FC<AddCoworkerProps> = ({ onClose }) => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
+    if (e) e.preventDefault();
 
     if (!firstName || !lastName || !departmentId || !photo) {
       setErrorMessage("All fields are required");
@@ -54,7 +54,6 @@ const AddCoworker: React.FC<AddCoworkerProps> = ({ onClose }) => {
         );
       }
 
-      const result = await response.json();
       setSuccessMessage("Employee added successfully!");
       setErrorMessage(null);
 
@@ -115,7 +114,6 @@ const AddCoworker: React.FC<AddCoworkerProps> = ({ onClose }) => {
           )}
           <div className={styles.buttonGroup}>
             <Button2 onClick={onClose}>გაუქმება</Button2>
-            {/* Modify onClick here to avoid type error */}
             <Button3
               text="თანამშრომლის დამატება"
               disabled={
@@ -125,9 +123,7 @@ const AddCoworker: React.FC<AddCoworkerProps> = ({ onClose }) => {
                 !photo ||
                 isSubmitting
               }
-              onClick={() =>
-                handleSubmit({} as React.FormEvent<HTMLFormElement>)
-              } // Fix to prevent type error
+              onClick={() => handleSubmit()}
             />
           </div>
         </form>

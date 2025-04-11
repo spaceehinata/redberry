@@ -10,8 +10,15 @@ import CommentsSection from "../CommentsSection/CommentsSection";
 import { getComments } from "@/api/comments/getComments";
 import { CommentType } from "@/types";
 
-const Comment = ({ taskId }: { taskId: string }) => {
+const Comment = ({
+  taskId,
+  initialComments, // პარამეტრის სახელის შეცვლა
+}: {
+  taskId: string;
+  initialComments: CommentType[]; // აქ უნდა იყოს CommentType[]
+}) => {
   const [text, setText] = useState("");
+  const [comments, setComments] = useState<CommentType[]>(initialComments); // აქ უკვე state-ის გამოყენება
 
   const handleComment = async () => {
     if (!text.trim()) return;
@@ -30,7 +37,7 @@ const Comment = ({ taskId }: { taskId: string }) => {
       console.error("Error in handleComment:", error);
     }
   };
-  const [comments, setComments] = useState<CommentType[]>([]);
+
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,8 +50,6 @@ const Comment = ({ taskId }: { taskId: string }) => {
       } else {
         setError("Failed to load comments");
       }
-    } catch (error) {
-      setError("Error fetching comments");
     } finally {
       setLoading(false);
     }

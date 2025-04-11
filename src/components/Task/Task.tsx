@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Styles from "./Task.module.scss";
 import Square from "../Tag/Square/Square";
 import Round from "../Tag/Round/Round";
-import TaskHeadWrapper from "../TaskHead/TaskHead";
 import { clsx } from "clsx";
 import { TaskColor } from "@/types";
 import Link from "next/link";
@@ -19,12 +18,7 @@ interface TaskData {
   employee: { name: string; surname: string; avatar?: string };
   department: { name: string };
   status: { id: number; name: string };
-  total_comments?: number; // ✅ comes from backend
-}
-
-interface DepartmentData {
-  id: number;
-  name: string;
+  total_comments?: number;
 }
 
 interface StatusData {
@@ -46,53 +40,34 @@ const Task: React.FC<TaskProps> = ({
   filters = { departments: [], priorities: [], employees: [] },
 }) => {
   const [tasks, setTasks] = useState<TaskData[]>([]);
-  const [priorities, setPriorities] = useState([]);
   const [statuses, setStatuses] = useState<StatusData[]>([]);
-  const [departments, setDepartments] = useState<DepartmentData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch tasks, statuses, priorities, and departments
+  // Fetch tasks, statuses
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [tasksRes, prioritiesRes, statusesRes, departmentsRes] =
-          await Promise.all([
-            fetch(`${API_URL}/tasks`, {
-              headers: { Authorization: `Bearer ${TOKEN}` },
-            }),
-            fetch(`${API_URL}/priorities`, {
-              headers: { Authorization: `Bearer ${TOKEN}` },
-            }),
-            fetch(`${API_URL}/statuses`, {
-              headers: { Authorization: `Bearer ${TOKEN}` },
-            }),
-            fetch(`${API_URL}/departments`, {
-              headers: { Authorization: `Bearer ${TOKEN}` },
-            }),
-          ]);
+        const [tasksRes, statusesRes] = await Promise.all([
+          fetch(`${API_URL}/tasks`, {
+            headers: { Authorization: `Bearer ${TOKEN}` },
+          }),
+          fetch(`${API_URL}/statuses`, {
+            headers: { Authorization: `Bearer ${TOKEN}` },
+          }),
+        ]);
 
-        if (
-          !tasksRes.ok ||
-          !prioritiesRes.ok ||
-          !statusesRes.ok ||
-          !departmentsRes.ok
-        ) {
+        if (!tasksRes.ok || !statusesRes.ok) {
           throw new Error("Failed to fetch data");
         }
 
-        const [tasksData, prioritiesData, statusesData, departmentsData] =
-          await Promise.all([
-            tasksRes.json(),
-            prioritiesRes.json(),
-            statusesRes.json(),
-            departmentsRes.json(),
-          ]);
+        const [tasksData, statusesData] = await Promise.all([
+          tasksRes.json(),
+          statusesRes.json(),
+        ]);
 
         setTasks(tasksData);
-        setPriorities(prioritiesData);
         setStatuses(statusesData);
-        setDepartments(departmentsData);
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);
@@ -126,10 +101,22 @@ const Task: React.FC<TaskProps> = ({
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const monthNames = [
-      "იანვ", "თებ", "მარ", "აპრ", "მაი", "ივნ",
-      "ივლ", "აგვ", "სექ", "ოქტ", "ნოე", "დეკ"
+      "იანვ",
+      "თებ",
+      "მარ",
+      "აპრ",
+      "მაი",
+      "ივნ",
+      "ივლ",
+      "აგვ",
+      "სექ",
+      "ოქტ",
+      "ნოე",
+      "დეკ",
     ];
-    return `${date.getDate()} ${monthNames[date.getMonth()]}, ${date.getFullYear()}`;
+    return `${date.getDate()} ${
+      monthNames[date.getMonth()]
+    }, ${date.getFullYear()}`;
   };
 
   const filteredTasks =
@@ -163,7 +150,6 @@ const Task: React.FC<TaskProps> = ({
 
   return (
     <div className={Styles.container}>
-      <TaskHeadWrapper />
       <div className={Styles.taskGrid}>
         {statuses.map((status, index) => (
           <div key={status.id} className={Styles.taskColumn}>
@@ -198,7 +184,7 @@ const Task: React.FC<TaskProps> = ({
                     />
                     <div className={Styles.comments}>
                       <img src="/asserts/Comments.svg" alt="comment" />
-                      <p>{task.total_comments ?? 0}</p> {/* ✅ comment count from backend */}
+                      <p>{task.total_comments ?? 0}</p>{" "}
                     </div>
                   </div>
                 </Link>

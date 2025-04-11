@@ -14,7 +14,7 @@ const PrioritiesDropdown: React.FC<PrioritiesDropdownProps> = ({
   const [selectedPriority, setSelectedPriority] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
+  const [error] = useState<string>("");
 
   const toggleDropdown = async () => {
     if (!isOpen && priorities.length === 0) {
@@ -22,8 +22,6 @@ const PrioritiesDropdown: React.FC<PrioritiesDropdownProps> = ({
       try {
         const data = await fetchPriorities();
         setPriorities(data);
-      } catch (error) {
-        setError("Error fetching priorities");
       } finally {
         setLoading(false);
       }

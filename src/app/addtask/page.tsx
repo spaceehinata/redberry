@@ -12,12 +12,19 @@ import DatePicker from "@/components/calendar/DatePicker";
 import EmployeeDropdown from "@/components/employee/EmployeeDropdow";
 import Textarea from "@/components/Textarea/TextArea";
 import { EmployeeData } from "@/api/Employees";
-import Header from "@/components/Header/Header";
+// import Header from "@/components/Header/Header";
 
 const API_URL = "https://momentum.redberryinternship.ge/api";
 const TOKEN = "9e85a2d7-4757-4769-9e4e-f7d01e4f8d08";
-
-// Yup validation schema
+interface FormValues {
+  taskName: string;
+  taskDescription: string;
+  departmentId: string;
+  status: string;
+  priority: string;
+  dueDate: string | null;
+  selectedEmployee: EmployeeData | null;
+}
 const validationSchema = Yup.object({
   taskName: Yup.string().required("სათაური აუცილებელია!"),
   taskDescription: Yup.string()
@@ -34,12 +41,11 @@ const AddTask = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: FormValues) => {
     setIsSubmitting(true);
     setErrorMessage(null);
     setSuccessMessage(null);
 
-    // ✅ format dueDate to RFC 3339
     const formattedDueDate = values.dueDate
       ? new Date(values.dueDate).toISOString()
       : null;
@@ -73,8 +79,6 @@ const AddTask = () => {
       setTimeout(() => {
         setSuccessMessage(null);
       }, 2000);
-    } catch (error: any) {
-      setErrorMessage(error.message || "უცნობი შეცდომა");
     } finally {
       setIsSubmitting(false);
     }
@@ -82,7 +86,7 @@ const AddTask = () => {
 
   return (
     <div className={styles.container}>
-      <Header />
+      {/* <Header /> */}
       <h1 className={styles.heading}>შექმენი ახალი დავალება</h1>
       <Formik
         initialValues={{
@@ -108,7 +112,11 @@ const AddTask = () => {
                   value={values.taskName}
                   onChange={handleChange}
                 />
-                <ErrorMessage name="taskName" component="div" className={styles.error} />
+                <ErrorMessage
+                  name="taskName"
+                  component="div"
+                  className={styles.error}
+                />
               </div>
               <div className={styles.inputGroup}>
                 <label className={styles.label}>აღწერა</label>
@@ -118,7 +126,11 @@ const AddTask = () => {
                   value={values.taskDescription}
                   onChange={handleChange}
                 />
-                <ErrorMessage name="taskDescription" component="div" className={styles.error} />
+                <ErrorMessage
+                  name="taskDescription"
+                  component="div"
+                  className={styles.error}
+                />
               </div>
               <div className={styles.pr}>
                 <div className={styles.priority}>
@@ -129,7 +141,11 @@ const AddTask = () => {
                     value={values.priority}
                     onChange={(id: string) => setFieldValue("priority", id)}
                   />
-                  <ErrorMessage name="priority" component="div" className={styles.error} />
+                  <ErrorMessage
+                    name="priority"
+                    component="div"
+                    className={styles.error}
+                  />
                 </div>
                 <div className={styles.statues}>
                   <label className={styles.label}>სტატუსი*</label>
@@ -139,7 +155,11 @@ const AddTask = () => {
                     value={values.status}
                     onChange={(id: string) => setFieldValue("status", id)}
                   />
-                  <ErrorMessage name="status" component="div" className={styles.error} />
+                  <ErrorMessage
+                    name="status"
+                    component="div"
+                    className={styles.error}
+                  />
                 </div>
               </div>
             </div>
@@ -153,7 +173,11 @@ const AddTask = () => {
                   value={values.departmentId}
                   onChange={(id: string) => setFieldValue("departmentId", id)}
                 />
-                <ErrorMessage name="departmentId" component="div" className={styles.error} />
+                <ErrorMessage
+                  name="departmentId"
+                  component="div"
+                  className={styles.error}
+                />
               </div>
 
               <div className={styles.RinputGroup}>
@@ -162,7 +186,9 @@ const AddTask = () => {
                   name="selectedEmployee"
                   component={EmployeeDropdown}
                   value={values.selectedEmployee}
-                  onChange={(employee: EmployeeData) => setFieldValue("selectedEmployee", employee)}
+                  onChange={(employee: EmployeeData) =>
+                    setFieldValue("selectedEmployee", employee)
+                  }
                 />
               </div>
 
@@ -176,11 +202,19 @@ const AddTask = () => {
                 />
               </div>
 
-              {errorMessage && <div className={styles.error}>{errorMessage}</div>}
-              {successMessage && <div className={styles.success}>{successMessage}</div>}
+              {errorMessage && (
+                <div className={styles.error}>{errorMessage}</div>
+              )}
+              {successMessage && (
+                <div className={styles.success}>{successMessage}</div>
+              )}
 
               <div className={styles.button}>
-                <Button3 text="დავალების დამატება" disabled={isSubmitting} type="submit" />
+                <Button3
+                  text="დავალების დამატება"
+                  disabled={isSubmitting}
+                  type="submit"
+                />
               </div>
             </div>
           </Form>
