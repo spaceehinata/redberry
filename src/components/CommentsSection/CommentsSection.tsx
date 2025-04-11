@@ -2,44 +2,49 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { getComments } from "@/api/comments/getComments";
+// import React, { useState, useEffect } from "react";
+// import { getComments } from "@/api/comments/getComments";
 import CommentTree from "../CommentTree/CommentTree";
-import { CommentType } from "@/types";
+// import { CommentType } from "@/types";
 
-const CommentsSection = ({ taskId }: { taskId: string }) => {
-  // taskId as string
-  const [comments, setComments] = useState<CommentType[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+const CommentsSection = ({
+  taskId,
+  comments,
+}: {
+  taskId: string;
+  comments: string;
+}) => {
+  // const [comments, setComments] = useState<CommentType[]>([]);
+  // const [loading, setLoading] = useState<boolean>(true);
+  // const [error, setError] = useState<string | null>(null);
 
-  const fetchComments = async () => {
-    try {
-      setLoading(true);
-      const response = await getComments(taskId); // taskId as string
-      if (response) {
-        setComments(response);
-      } else {
-        setError("Failed to load comments");
-      }
-    } catch (error) {
-      setError("Error fetching comments");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchComments = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await getComments(taskId);
+  //     if (response) {
+  //       setComments(response);
+  //     } else {
+  //       setError("Failed to load comments");
+  //     }
+  //   } catch (error) {
+  //     setError("Error fetching comments");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchComments();
-  }, [taskId]);
+  // useEffect(() => {
+  //   fetchComments();
+  // }, [taskId]);
 
-  if (loading) {
-    return <div>Loading comments...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading comments...</div>;
+  // }
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  // if (error) {
+  //   return <div>{error}</div>;
+  // }
 
   return (
     <div>

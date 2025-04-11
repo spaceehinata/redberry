@@ -48,4 +48,5 @@ export interface CommentType {
   author_avatar: string;
   author_nickname: string;
   sub_comments: CommentType[];
+  comments: CommentType[];
 }
