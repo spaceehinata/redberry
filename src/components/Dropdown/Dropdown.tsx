@@ -3,6 +3,7 @@ import DropdownMenu from "./DropdownMenu";
 import { fetchData } from "../../api/index";
 import styles from "./Dropdown.module.scss";
 import clsx from "clsx";
+import Image from "next/image"; // 🛠 import Image from next/image
 
 interface OptionData {
   id: number;
@@ -85,7 +86,12 @@ const Dropdown: React.FC<{ onFilterChange: (filters: FilterState) => void }> = (
             onClick={() => handleClick(index)}
           >
             <p>{text}</p>
-            <img src="/asserts/Shape.svg" alt="Dropdown arrow" />
+            <Image
+              src="/asserts/Shape.svg"
+              alt="Dropdown arrow"
+              width={16} // Example size, adjust as needed
+              height={16} // Example size, adjust as needed
+            />
           </div>
         ))}
       </div>

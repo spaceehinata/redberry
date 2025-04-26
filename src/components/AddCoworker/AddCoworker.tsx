@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useState } from "react";
+import Image from "next/image";
 import styles from "./AddCoworker.module.scss";
 import ProfilePhotoUploader from "../PhotoUpload/PhotoUpload";
 import Button2 from "../Buttons/Button2/Button2";
@@ -77,7 +80,12 @@ const AddCoworker: React.FC<AddCoworkerProps> = ({ onClose }) => {
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
         <button className={styles.closeButton} onClick={onClose}>
-          <img src="/asserts/deleteV.svg" alt="Close" />
+          <Image
+            src="/asserts/deleteV.svg"
+            alt="Close"
+            width={24}
+            height={24}
+          />
         </button>
         <h2 className={styles.h2}>თანამშრომლის დამატება</h2>
         <form onSubmit={handleSubmit}>

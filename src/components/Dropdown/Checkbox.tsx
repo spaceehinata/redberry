@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image"; // 🛠 import Image from next/image
 import styles from "./Dropdown.module.scss";
 
 interface CheckboxProps {
@@ -18,7 +19,16 @@ const Checkbox: React.FC<CheckboxProps> = ({ checked, onChange, label, avatar })
         className={styles.checkboxInput}
       />
       <span className={styles.checkboxLabel}>
-        {avatar && <img src={avatar} alt={label} className={styles.avatar} />} {label}
+        {avatar && (
+          <Image
+            src={avatar}
+            alt={label}
+            className={styles.avatar}
+            width={24} // Example size, adjust as needed
+            height={24} // Example size, adjust as needed
+          />
+        )}
+        {label}
       </span>
     </label>
   );

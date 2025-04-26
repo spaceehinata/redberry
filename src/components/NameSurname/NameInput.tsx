@@ -1,54 +1,58 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
+import Image from "next/image"; // Import Image from next/image
 import styles from "./Name.module.scss";
 
-interface NameInputProps {
-  label?: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+const NameInput: React.FC = () => {
+  const [name, setName] = useState<string>("");
 
-const NameInput: React.FC<NameInputProps> = ({ label, value, onChange }) => {
-  const isValid = value.length >= 2 && value.length <= 255;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value); // Update state with the new value
+  };
+
+  const isValid = name.length >= 2 && name.length <= 255;
 
   return (
     <div className={styles.inputContainer}>
-      <label>{label}</label>
       <div className={styles.inputWrapper}>
         <input
           type="text"
-          value={value}
-          onChange={onChange}
+          value={name} // Bind the value to the state
+          onChange={handleChange} // Call handleChange on change
           className={
-            value.length === 0 ? "" : isValid ? styles.valid : styles.invalid
+            name.length === 0 ? "" : isValid ? styles.valid : styles.invalid
           }
           required
         />
       </div>
       <div className={styles.validation}>
         <div className={styles.validationItem}>
-          <img
+          <Image
             src={
-              value.length === 0
+              name.length === 0
                 ? "/asserts/checkGr.svg"
-                : value.length >= 2
+                : name.length >= 2
                 ? "/asserts/check.svg"
                 : "/asserts/checkRed.svg"
             }
             alt="status"
+            width={16} // Set width
+            height={16} // Set height
           />
           <span>მინიმუმ 2 სიმბოლო</span>
         </div>
         <div className={styles.validationItem}>
-          <img
+          <Image
             src={
-              value.length === 0
+              name.length === 0
                 ? "/asserts/checkGr.svg"
-                : value.length <= 255
+                : name.length <= 255
                 ? "/asserts/check.svg"
                 : "/asserts/checkRed.svg"
             }
             alt="status"
+            width={16} // Set width
+            height={16} // Set height
           />
           <span>მაქსიმუმ 255 სიმბოლო</span>
         </div>

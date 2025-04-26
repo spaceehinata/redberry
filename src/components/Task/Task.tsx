@@ -5,6 +5,7 @@ import Round from "../Tag/Round/Round";
 import { clsx } from "clsx";
 import { TaskColor } from "@/types";
 import Link from "next/link";
+import Image from "next/image"; // 🛠 Import Image from next/image
 
 const API_URL = "https://momentum.redberryinternship.ge/api";
 const TOKEN = "9e85a2d7-4757-4769-9e4e-f7d01e4f8d08";
@@ -114,9 +115,7 @@ const Task: React.FC<TaskProps> = ({
       "ნოე",
       "დეკ",
     ];
-    return `${date.getDate()} ${
-      monthNames[date.getMonth()]
-    }, ${date.getFullYear()}`;
+    return `${date.getDate()} ${monthNames[date.getMonth()]}, ${date.getFullYear()}`;
   };
 
   const filteredTasks =
@@ -177,14 +176,21 @@ const Task: React.FC<TaskProps> = ({
                     <p>{task.description}</p>
                   </div>
                   <div className={Styles.bottom}>
-                    <img
+                    <Image
                       src={task.employee.avatar || "/asserts/avatar.svg"}
                       alt={`${task.employee.name} ${task.employee.surname}`}
                       className={Styles.avatar}
+                      width={40} // Adjust size as needed
+                      height={40} // Adjust size as needed
                     />
                     <div className={Styles.comments}>
-                      <img src="/asserts/Comments.svg" alt="comment" />
-                      <p>{task.total_comments ?? 0}</p>{" "}
+                      <Image
+                        src="/asserts/Comments.svg"
+                        alt="comment"
+                        width={16} // Adjust size as needed
+                        height={16} // Adjust size as needed
+                      />
+                      <p>{task.total_comments ?? 0}</p>
                     </div>
                   </div>
                 </Link>

@@ -1,7 +1,9 @@
+"use client";
 import React, { useState } from "react";
 import styles from "./StatuesDropdown.module.scss";
 import { fetchPriorities, Priority } from "../../api/index";
 import PrioritiesDropdownItem from "./PrioritiesDropdownItem";
+import Image from "next/image"; // Import Image from next/image
 
 interface PrioritiesDropdownProps {
   onPriorityChange: (priorityId: number) => void;
@@ -14,14 +16,17 @@ const PrioritiesDropdown: React.FC<PrioritiesDropdownProps> = ({
   const [selectedPriority, setSelectedPriority] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const toggleDropdown = async () => {
     if (!isOpen && priorities.length === 0) {
       setLoading(true);
+      setError(""); // Clear previous errors before fetching new data
       try {
         const data = await fetchPriorities();
         setPriorities(data);
+      } catch {
+        setError("გთხოვთ სცადოთ სხვა დროს.");
       } finally {
         setLoading(false);
       }
@@ -40,7 +45,12 @@ const PrioritiesDropdown: React.FC<PrioritiesDropdownProps> = ({
       <div className={styles.dropdownHeader} onClick={toggleDropdown}>
         <span>{selectedPriority || "აირჩიე პრიორიტეტი"}</span>
         <span className={`${styles.arrow} ${isOpen ? styles.open : ""}`}>
-          <img src="/asserts/Shape.svg" alt="Dropdown arrow" />
+          <Image
+            src="/asserts/Shape.svg"
+            alt="Dropdown arrow"
+            width={24}  // Set the width
+            height={24} // Set the height
+          />
         </span>
       </div>
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./DepartmetDropDown.module.scss";
 import { fetchDepartments, Department } from "../../api/index";
+import Image from "next/image"; // Import Image from next/image
 
 interface DepartmentDropdownProps {
   onDepartmentChange: (departmentId: number) => void;
@@ -34,9 +35,11 @@ const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({
         <div className={styles.dropdownSelected}>
           {selectedDepartment || "დეპარტამენტი მიუთითეთ აქ"}
         </div>
-        <img
-          src="/asserts/Shape.svg"
+        <Image
+          src="/asserts/Shape.svg" // Image path
           alt="Dropdown arrow"
+          width={16} // Set a width for the image
+          height={16} // Set a height for the image
           className={`${styles.dropdownArrow} ${isOpen ? styles.open : ""}`}
         />
       </div>

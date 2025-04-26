@@ -7,7 +7,7 @@ import Square from "@/components/Tag/Square/Square";
 import StatusDropdown from "@/components/StatusDropdown/StatusDropdown";
 import Comment from "@/components/Comments/Comments";
 import { updateTaskStatus } from "@/api/updateTaskStatus";
-// import Header from "@/components/Header/Header";
+import Image from "next/image"; // <-- added import
 
 const API_URL = "https://momentum.redberryinternship.ge/api";
 const TOKEN = "9e85a2d7-4757-4769-9e4e-f7d01e4f8d08";
@@ -99,7 +99,6 @@ const TaskPage: React.FC = () => {
 
   return (
     <div>
-      {/* <Header /> */}
       <div className={Styles.container}>
         <div className={Styles.twoColumnLayout}>
           {/* Left Column: Task Details */}
@@ -116,9 +115,11 @@ const TaskPage: React.FC = () => {
               <span>დავალების დეტალები</span>
 
               <div className={Styles.detailItem}>
-                <img
+                <Image
                   src="/asserts/icon1.svg"
                   alt="სტატუსი"
+                  width={24}
+                  height={24}
                   className={Styles.icon}
                 />
                 <div>
@@ -132,9 +133,11 @@ const TaskPage: React.FC = () => {
               </div>
 
               <div className={Styles.detailItem}>
-                <img
+                <Image
                   src="/asserts/icon2.svg"
                   alt="თანამშრომელი"
+                  width={24}
+                  height={24}
                   className={Styles.icon}
                 />
                 <div>
@@ -145,9 +148,11 @@ const TaskPage: React.FC = () => {
                     <p>{task.department.name}</p>
                   </div>
                   <div className={Styles.employeeInfo}>
-                    <img
+                    <Image
                       src={task.employee.avatar || "/asserts/avatar.svg"}
                       alt={`${task.employee.name} ${task.employee.surname}`}
+                      width={40}
+                      height={40}
                       className={Styles.avatar}
                     />
                     <p>
@@ -158,9 +163,11 @@ const TaskPage: React.FC = () => {
               </div>
 
               <div className={Styles.detailItem}>
-                <img
+                <Image
                   src="/asserts/calendar.svg"
                   alt="დავალების ვადა"
+                  width={24}
+                  height={24}
                   className={Styles.icon}
                 />
                 <div>

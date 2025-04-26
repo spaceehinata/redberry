@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image"; // 🛠 import Image from next/image
 import styles from "./Square.module.scss";
 import clsx from "clsx";
+
 type Size = "big" | "small";
 
 type Props = {
@@ -41,7 +43,12 @@ const Square = ({ priority, size, icon, label }: Props) => {
 
   return (
     <div className={clsx(styles.button, styles[color], styles[size])}>
-      <img src={icon || priorityIcon} alt={label || priorityLabel} />
+      <Image
+        src={icon || priorityIcon}
+        alt={label || priorityLabel}
+        width={16}
+        height={16}
+      />
       <span>{label || priorityLabel}</span>
     </div>
   );

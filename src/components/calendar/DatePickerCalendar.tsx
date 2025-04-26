@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./DatePicker.module.css";
-
+import Image from "next/image"; 
 interface DatePickerCalendarProps {
   selectedDate: Date | null;
   onDateSelect: (date: Date) => void;
@@ -49,25 +49,31 @@ export const DatePickerCalendar: React.FC<DatePickerCalendarProps> = ({
             year: "numeric",
           })}
         </span>
-        <img
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/a1fba4a030e71f570da9b4f8420183f2c45a03ce?placeholderIfAbsent=true"
+        <Image
+          src="/asserts/Rectangle 4.svg"
           alt="Calendar icon"
           className={styles.monthIcon}
+          width={20}
+          height={20} 
         />
       </div>
       <div className={styles.arrows}>
         <button onClick={handlePrevMonth} className={styles.arrowButton}>
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/588e0df6c75ad7fc1db25febc21878507380346f?placeholderIfAbsent=true"
+        <Image
+            src="/asserts/Arrow-upp.svg"
             alt="Previous month"
             className={styles.arrowIcon}
+            width={20} 
+            height={20}
           />
         </button>
         <button onClick={handleNextMonth} className={styles.arrowButton}>
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/12594160453c9e10e88cc44794668682ac279974?placeholderIfAbsent=true"
+        <Image
+            src="/asserts/Arrow-down.svg"
             alt="Next month"
             className={styles.arrowIcon}
+            width={20} 
+            height={20}
           />
         </button>
       </div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Styles from "../PrioritiesDropdown/StatuesDropdown.module.scss";
 import { StatusData } from "@/types";
+import Image from "next/image"; // Import Image from next/image
 
 interface StatusDropdownProps {
   onStatusChange: (statusId: number) => void;
@@ -61,7 +62,13 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
       <div className={Styles.dropdownHeader} onClick={toggleDropdown}>
         <span>{selectedStatus || title}</span>
         <span className={`${Styles.arrow} ${isOpen ? Styles.open : ""}`}>
-          <img src="/asserts/Shape.svg" alt="Dropdown arrow" />
+          {/* Replace img with Image component */}
+          <Image
+            src="/asserts/Shape.svg"
+            alt="Dropdown arrow"
+            width={16} // Set appropriate width
+            height={16} // Set appropriate height
+          />
         </span>
       </div>
       {isOpen && (

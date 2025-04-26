@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./DatePicker.module.css";
+import Image from "next/image";
 
 interface DatePickerInputProps {
   value: Date | null;
@@ -30,10 +31,12 @@ export const DatePickerInput: React.FC<DatePickerInputProps> = ({
   return (
     <div className={styles.inputContainer}>
       <button onClick={onClick} type="button" className={styles.dateButton}>
-        <img
+      <Image
           src="asserts/calendar-line.svg"
           alt="Calendar"
           className={styles.calendarIcon}
+          width={20} 
+          height={20} 
         />
       </button>
       <input

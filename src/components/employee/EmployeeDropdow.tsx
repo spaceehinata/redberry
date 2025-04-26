@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./Employee.module.scss";
 import { fetchEmployees, EmployeeData } from "../../api/Employees";
 import EmployeeDropdownItem from "./EmployeeDropdowItem";
+import Image from "next/image"; // 🛠 import Image from next/image
 
 interface EmployeeDropdownProps {
   title: string;
@@ -40,21 +41,13 @@ const EmployeeDropdown: React.FC<EmployeeDropdownProps> = ({
     <div className={styles.dropdownContainer}>
       <div className={styles.dropdownHeader} onClick={toggleDropdown}>
         {selectedEmployee ? (
-          // <div className={styles.employeeItemContent}>
-          //   <img
-          //     src={selectedEmployee.avatar}
-          //     alt={`${selectedEmployee.name} ${selectedEmployee.surname}`}
-          //     className={styles.avatar}
-          //   />
-          //   <span className={styles.employeeName}>
-          //     {selectedEmployee.name} {selectedEmployee.surname}
-          //   </span>
-          // </div>
           <div className={styles.employeeContainer}>
-            <img
+            <Image
               src={selectedEmployee.avatar}
               alt={`${selectedEmployee.name} ${selectedEmployee.surname}`}
               className={styles.avatar}
+              width={24} // Example width, adjust as needed
+              height={24} // Example height, adjust as needed
             />
             <span className={styles.employeeName}>
               {selectedEmployee.name} {selectedEmployee.surname}
@@ -64,7 +57,12 @@ const EmployeeDropdown: React.FC<EmployeeDropdownProps> = ({
           <span className={styles.placeholder}>{title}</span>
         )}
         <span className={`${styles.arrow} ${isOpen ? styles.open : ""}`}>
-          <img src="/asserts/Shape.svg" alt="Dropdown arrow" />
+          <Image
+            src="/asserts/Shape.svg"
+            alt="Dropdown arrow"
+            width={16} // Example width, adjust as needed
+            height={16} // Example height, adjust as needed
+          />
         </span>
       </div>
 

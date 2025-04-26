@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./Employee.module.scss";
 import { EmployeeData } from "../../api/Employees";
+import Image from "next/image"; // 🛠 import Image from next/image
 
 interface EmployeeDropdownItemProps {
   employee: EmployeeData;
@@ -19,10 +20,12 @@ const EmployeeDropdownItem: React.FC<EmployeeDropdownItemProps> = ({
       onClick={onSelect}
     >
       <div className={styles.employeeItemContent}>
-        <img
+        <Image
           src={employee.avatar}
           alt={`${employee.name} ${employee.surname}`}
           className={styles.avatar}
+          width={48} // Example size, adjust as needed
+          height={48} // Example size, adjust as needed
         />
         <span className={styles.employeeName}>
           {employee.name} {employee.surname}
