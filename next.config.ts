@@ -6,14 +6,10 @@ const nextConfig = {
     domains: [
       "momentum.redberryinternship.ge",
       "via.placeholder.com",
-      "api.dicebear.com", // add this one too
+      "api.dicebear.com", 
+      "cdn.builder.io", 
     ],
   },
 };
 
 module.exports = nextConfig;
-module.exports = {
-  images: {
-    domains: ['cdn.builder.io'], 
-  },
-};
